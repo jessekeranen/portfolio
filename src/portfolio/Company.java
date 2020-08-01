@@ -19,7 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class Company {
     
-    protected String name;
+    public String name;
     private double[] prices;
     protected double[] marketValues;
     private double[] bookValues;
@@ -41,10 +41,9 @@ public class Company {
         this.beMeRatios = beMeRatio();
     }
     
-    public Company(String filename, int number) {
+    public Company(File file, int number) {
         try  
         {  
-        File file = new File(filename);   //creating a new file instance  
         FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
         //creating Workbook instance that refers to .xlsx file  
         XSSFWorkbook wb = new XSSFWorkbook(fis);   
@@ -78,11 +77,16 @@ public class Company {
                     name = cell.toString();
                 }
                 
-            }    
+            }  
+            returns = returns();
+            bookValues = bookValues(number);
+            marketValues = marketValues(number);
+            beMeRatios = beMeRatio();
         }  
         catch(Exception e)  {  
             e.printStackTrace();  
         }  
+        
     }
     
     /**
@@ -109,14 +113,47 @@ public class Company {
         return bemeRatios;
     }
     
+    public double[] bookValues(int number) {
+        return reader("/Users/jessekeranen/projects/Työkirja8.xlsx", number);
+    }
+    
+    public double[] marketValues(int number) {
+        return reader("/Users/jessekeranen/projects/Työkirja9.xlsx", number);
+    }
+    
+    public double[] reader(String file2, int number) {
+        try  
+        {  
+        File file = new File(file2);
+        //File file = new File(textBox.getText());   //creating a new file instance  
+        FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
+        //creating Workbook instance that refers to .xlsx file  
+        XSSFWorkbook wb = new XSSFWorkbook(fis);   
+        XSSFSheet sheet = wb.getSheetAt(0);
+        XSSFCell cell;
+        
+        double[] array = new double[sheet.getPhysicalNumberOfRows()];
+        int columnIndex = number;
+        for (int rowIndex = 0; rowIndex<sheet.getPhysicalNumberOfRows(); rowIndex++){
+            cell = sheet.getRow(rowIndex).getCell(columnIndex);
+            if(cell.getCellTypeEnum() == CellType.NUMERIC) {
+                array[rowIndex] = cell.getNumericCellValue();
+                }
+            }
+        return array;
+        }
+        catch(Exception e)  {  
+            e.printStackTrace();  
+        }
+        return null;
+    }
+    
+    
     /**
      * @param args ei käytössä
      */
     public static void main(String[] args) {
-        double[] hinnat = {10,15,20,10};
-        double[] arvot = {100, 200, 1000, 300};
-        double[] book = {10, 200,1000, 30};
-        Company nokia = new Company("Nokia", hinnat, arvot, book);
-        System.out.println(nokia);
+        //Company nokia = new Company("Työkirja7.xlsx", 1);
+        //System.out.println(nokia);
     }
 }

@@ -9,9 +9,9 @@ import java.util.Arrays;
  */
 public class Market {
     
-    private int companyCount;
+    public int companyCount;
     private int companyMaxCount = 1;
-    private Company[] companies = new Company[companyMaxCount];
+    public Company[] companies = new Company[companyMaxCount];
     private int portfolioCount;
     private int portfolioMaxCount = 1;
     private Portfolio[] portfolios = new Portfolio[portfolioMaxCount];
@@ -42,14 +42,27 @@ public class Market {
                 companies = companies2;
                 companyCount++;
             }
+        
     }
     
     /**
      * @param portfolio that is constructed from stocks on market
      */
     public void addPortfolio(Portfolio portfolio) {
-        portfolios[portfolioCount] = portfolio;
-        portfolioCount++;
+        if(portfolioCount < portfolioMaxCount) {
+            portfolios[portfolioCount] = portfolio;
+            portfolioCount++;
+        }
+        else {
+            Portfolio[] portfolios2 = new Portfolio[portfolioCount+1];
+            for(int i = 0; i < portfolios.length; i++) {
+                portfolios2[i] = portfolios[i];
+            }
+            portfolios2[portfolioCount] = portfolio;
+            portfolios = portfolios2;
+            portfolioCount++;
+        }
+        
     }
     
     /**
@@ -59,6 +72,8 @@ public class Market {
      * @param year which year
      */
     public void constructPortfolio(Portfolio port, int bemebreakpoint, int sizebreakpoint, int year) {
+        beMeBreakPoints(year);
+        sizeBreakPoints(year);
         for(int i = 0; i < companies.length; i++) {
             if((companies[i].beMeRatios[year] <= beMeBreakPoints[bemebreakpoint]) &&(companies[i].marketValues[year] <= sizeBreakPoints[sizebreakpoint])) port.addCompany(companies[i]);
         }
@@ -115,14 +130,7 @@ public class Market {
      */
     public static void main(String[] args) {
         Market one = new Market();
-        Company yritys = new Company("/Users/jessekeranen/projects/Työkirja7.xlsx",0);
-        Company yritys1 = new Company("/Users/jessekeranen/projects/Työkirja7.xlsx",1);
-        Company yritys2 = new Company("/Users/jessekeranen/projects/Työkirja7.xlsx",2);
-        Company yritys3 = new Company("/Users/jessekeranen/projects/Työkirja7.xlsx",3);
-        one.addCompany(yritys);
-        one.addCompany(yritys1);
-        one.addCompany(yritys2);
-        one.addCompany(yritys3);
+        
         //one.beMeBreakPoints(1);
         //one.sizeBreakPoints(1);
         //System.out.println(Arrays.toString(one.beMeBreakPoints));

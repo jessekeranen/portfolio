@@ -22,6 +22,7 @@ public class Portfolio {
     public Portfolio() {
         //
     }
+   
     
     /**
      * @param company company that is added to the portfolio
