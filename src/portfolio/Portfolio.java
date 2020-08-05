@@ -15,7 +15,11 @@ public class Portfolio {
     public Company[] companies = new Company[maxCount];
     private double[] portfolioReturns = new double[8];
     private double[] portfolioMarketValue = new double[8];
-    private int period = 4;
+    private int period = 8;
+    public double averagePortfolioReturn;
+    public String averagePortfolioReturnString;
+    public double averagePortfolioMarketValue;
+    public String averagePortfolioMarketValueString;
     
     /**
      * default constuctor
@@ -50,12 +54,39 @@ public class Portfolio {
      * calculates monthly weighted returns of the portfolio
      */
     public void portfolioReturn() {
-        for(int i = 0; i < period-1; i++) {
+        for(int i = 1; i < period; i++) {
             for(int j = 0; j < companies.length; j++) {
                 portfolioReturns[i] += companies[j].returns[i]*(companies[j].marketValues[i]/portfolioMarketValue[i]); 
             }
         }
     }
+    
+    public void averagePortfolioReturn() {
+        double average = 0;
+        for(int i = 0; i < portfolioReturns.length; i++) {
+            average += portfolioReturns[i];
+        }
+        this.averagePortfolioReturn =  average/portfolioReturns.length;
+        averagePortfolioReturnString();
+    }
+    
+    public void averagePortfolioReturnString() {
+        String string = String.format("%.5f", averagePortfolioReturn);
+        this.averagePortfolioReturnString = String.valueOf(string);
+    }
+    
+    public void averagePortfolioMarketValue() {
+        double average = 0;
+        for(int i = 0; i < portfolioMarketValue.length; i++) {
+            average += portfolioMarketValue[i];
+        }
+        this.averagePortfolioMarketValue =  average/portfolioMarketValue.length;
+        averagePortfolioMarketValueString();
+    }
+    
+    public void averagePortfolioMarketValueString() {
+        String string = String.format("%.2f", averagePortfolioMarketValue);
+        this.averagePortfolioMarketValueString = String.valueOf(string);    }
     
     /**
      * calculates total market value of the portfolio

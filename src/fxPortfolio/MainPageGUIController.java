@@ -3,6 +3,7 @@ package fxPortfolio;
 import fi.jyu.mit.fxgui.ListChooser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import portfolio.Company;
 import portfolio.Market;
@@ -21,11 +22,18 @@ public class MainPageGUIController {
     @FXML
     ListChooser<Company> chooserCompanies;
     
+    @FXML private TextField portfolioName;
+    @FXML private TextField portfolioAveBeMe;
+    @FXML private TextField portfolioAveReturn;
+    @FXML private TextField portfolioAveMarketValue;
+    
     private Market market;
     private Portfolio currentPortfolio;
     
     public void setMarket(Market market) {
         this.market = market;
+        //chooserPortfolios.addSelectionListener(e-> showPortfolio(market));
+        
         for(int size = 1; size < 3; size++) {
             for(int value = 1; value < 3; value++) {
                 Portfolio portfolio = new Portfolio(size, value);
@@ -33,11 +41,23 @@ public class MainPageGUIController {
             }
         }
         market.constructPortfolios(market.portfolios, 1);
+        for( int i = 0; i < market.portfolios.length; i++) {
+            market.portfolios[i].portfolioMarketValue();
+            market.portfolios[i].portfolioReturn();
+            market.portfolios[i].averagePortfolioReturn();
+            market.portfolios[i].averagePortfolioMarketValue();
+        }
         
         showPortfolio(market);
-        //market.beMeBreakPoints(1);
-        //market.sizeBreakPoints(1);
         
+        
+    }
+    
+    private void addTextfields(Portfolio portfolio) {
+        portfolioName.setText(portfolio.name); 
+        portfolioAveBeMe.setText("");
+        portfolioAveMarketValue.setText(portfolio.averagePortfolioMarketValueString);
+        portfolioAveReturn.setText(portfolio.averagePortfolioReturnString);
     }
     
     private void showPortfolio(Market market) {
@@ -45,8 +65,7 @@ public class MainPageGUIController {
         for(int i = 0; i < market.portfolioCount; i++) {
             chooserPortfolios.add(market.portfolios[i].name, market.portfolios[i]);
         }
-        showCompanies(market.portfolios[0]);
-        
+        showCompanies(market.portfolios[0]);      
     }
     
     @FXML
@@ -61,6 +80,7 @@ public class MainPageGUIController {
         for(int i = 0; i < portfolio.companies.length; i++) {
             chooserCompanies.add(portfolio.companies[i].name, portfolio.companies[i]);
         }
+        addTextfields(portfolio);
     }
     
 }
