@@ -9,18 +9,21 @@ import java.util.Arrays;
  */
 public class Portfolio {
     
-    private int count = 0;
+    public int count = 0;
+    public String name;
     private int maxCount = 1;
-    private Company[] companies = new Company[maxCount];
+    public Company[] companies = new Company[maxCount];
     private double[] portfolioReturns = new double[8];
     private double[] portfolioMarketValue = new double[8];
     private int period = 4;
     
     /**
      * default constuctor
+     * @param size indicates the size of the companies in the portfolio
+     * @param value indicates the value of the companies in the portfolio
      */
-    public Portfolio() {
-        //
+    public Portfolio(int size, int value) {
+        this.name = "portfolio " + size + value;
     }
    
     
@@ -39,6 +42,7 @@ public class Portfolio {
             }
             companies2[count] = company;
             companies = companies2;
+            count++;
         }
     }
     
@@ -77,17 +81,6 @@ public class Portfolio {
      * @param args ei käytössä
      */
     public static void main(String[] args) {
-        double[] hinnat = {10,15,20,10};
-        double[] arvot = {100, 200, 1000, 300};
-        double[] book = {10, 200,1000, 30};
-        Company nokia = new Company("Nokia", hinnat, arvot, book);
-        Company elisa = new Company("Elisa", hinnat, arvot, book);
-        Portfolio one = new Portfolio();
-        one.addCompany(nokia);
-        one.addCompany(elisa);
-        one.portfolioMarketValue();
-        one.portfolioReturn();
-        System.out.println(Arrays.toString(one.portfolioMarketValue));
-        System.out.println(Arrays.toString(one.portfolioReturns));
+        //
     }
 }
