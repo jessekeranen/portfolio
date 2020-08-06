@@ -38,7 +38,6 @@ public class MainPageGUIController {
         //chooserPortfolios.addSelectionListener(e-> showPortfolio(market));
         
         for(int i = 0; i < Company.years; i++) {
-            market.adjustPortfolios();
             market.constructPortfolios(market.portfolios, i);
         }
         showPortfolio(market);     

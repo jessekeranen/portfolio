@@ -55,9 +55,10 @@ public class Portfolio {
      * @param year year
      */
     public void portfolioReturn(int year) {
-        for(int i = year; i < year+11; i++) {
+        for(int i = 0; i < 12; i++) {
             for(int j = 0; j < companies.length; j++) {
-                portfolioReturns[i] += companies[j].returns[i]*(companies[j].marketValues[i]/portfolioMarketValue[i]); 
+                int month = i+11;
+                portfolioReturns[i] += companies[j].returns[month]*(companies[j].marketValues[month]/portfolioMarketValue[i]); 
             }
         }
     }
@@ -94,9 +95,10 @@ public class Portfolio {
      * @param year year
      */
     public void portfolioMarketValue(int year) {
-        for(int i = year; i < year+11; i++) {
+        for(int i = 0; i < 12; i++) {
             for(int j = 0; j < companies.length; j++) {
-            portfolioMarketValue[i] += companies[j].marketValues[i];
+                int month = i+11;
+            portfolioMarketValue[i] += companies[j].marketValues[month];
             }
         }
     }
