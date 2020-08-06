@@ -11,12 +11,13 @@ public class Market {
     
     public int companyCount;
     private int companyMaxCount = 1;
-    public Company[] companies = new Company[companyMaxCount];
     public int portfolioCount;
     private int portfolioMaxCount = 1;
+    public Company[] companies = new Company[companyMaxCount];
     public Portfolio[] portfolios = new Portfolio[portfolioMaxCount];
     private double[] beMeBreakPoints = new double[1];
     private double[] sizeBreakPoints = new double[1];
+    private Portfolio[][] years = new Portfolio[10][20];
     
     /**
      * default constructor
@@ -65,11 +66,21 @@ public class Market {
         
     }
     
+    public void adjustPortfolios() {
+        for(int size = 1; size < 3; size++) {
+            for(int value = 1; value < 3; value++) {
+                Portfolio portfolio = new Portfolio(size, value);
+                addPortfolio(portfolio);
+            }
+        }
+    }
+    
     /**
      * @param port portfolio in which certain companies are added
-     * @param year which year
+     * @param period which year
      */
-    public void constructPortfolios(Portfolio[] port, int year) {
+    public void constructPortfolios(Portfolio[] port, int period) {
+        int year = period+1;
         beMeBreakPoints(year);
         sizeBreakPoints(year);
         for(int i = 0; i < companies.length; i++) {
@@ -78,8 +89,19 @@ public class Market {
             else if(companies[i].beMeRatios[year] <= beMeBreakPoints[year-1] && companies[i].marketValues[year] >= sizeBreakPoints[year-1]) portfolios[2].addCompany(companies[i]);
             else portfolios[3].addCompany(companies[i]);
         }
+        for( int i = 0; i < portfolios.length; i++) {
+            portfolios[i].portfolioMarketValue(year);
+            portfolios[i].portfolioReturn(year);
+            portfolios[i].averagePortfolioReturn();
+            portfolios[i].averagePortfolioMarketValue();
+        }
+        addPortfolios(portfolios);
     }
     
+    public void addPortfolios(Portfolio[] port) {
+        int i = 0;
+        years[i++] = port;
+    }
     
     /**
      * calculates be/me-break points from market data

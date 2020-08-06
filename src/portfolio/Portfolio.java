@@ -13,8 +13,8 @@ public class Portfolio {
     public String name;
     private int maxCount = 1;
     public Company[] companies = new Company[maxCount];
-    private double[] portfolioReturns = new double[8];
-    private double[] portfolioMarketValue = new double[8];
+    private double[] portfolioReturns = new double[12];
+    private double[] portfolioMarketValue = new double[12];
     private int period = 8;
     public double averagePortfolioReturn;
     public String averagePortfolioReturnString;
@@ -52,9 +52,10 @@ public class Portfolio {
     
     /**
      * calculates monthly weighted returns of the portfolio
+     * @param year year
      */
-    public void portfolioReturn() {
-        for(int i = 1; i < period; i++) {
+    public void portfolioReturn(int year) {
+        for(int i = year; i < year+11; i++) {
             for(int j = 0; j < companies.length; j++) {
                 portfolioReturns[i] += companies[j].returns[i]*(companies[j].marketValues[i]/portfolioMarketValue[i]); 
             }
@@ -90,9 +91,10 @@ public class Portfolio {
     
     /**
      * calculates total market value of the portfolio
+     * @param year year
      */
-    public void portfolioMarketValue() {
-        for(int i = 0; i < period; i++) {
+    public void portfolioMarketValue(int year) {
+        for(int i = year; i < year+11; i++) {
             for(int j = 0; j < companies.length; j++) {
             portfolioMarketValue[i] += companies[j].marketValues[i];
             }

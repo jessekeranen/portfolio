@@ -30,27 +30,18 @@ public class MainPageGUIController {
     private Market market;
     private Portfolio currentPortfolio;
     
+    /**
+     * @param market market that contains all the companies of the data
+     */
     public void setMarket(Market market) {
         this.market = market;
         //chooserPortfolios.addSelectionListener(e-> showPortfolio(market));
         
-        for(int size = 1; size < 3; size++) {
-            for(int value = 1; value < 3; value++) {
-                Portfolio portfolio = new Portfolio(size, value);
-                market.addPortfolio(portfolio);
-            }
+        for(int i = 0; i < Company.years; i++) {
+            market.adjustPortfolios();
+            market.constructPortfolios(market.portfolios, i);
         }
-        market.constructPortfolios(market.portfolios, 1);
-        for( int i = 0; i < market.portfolios.length; i++) {
-            market.portfolios[i].portfolioMarketValue();
-            market.portfolios[i].portfolioReturn();
-            market.portfolios[i].averagePortfolioReturn();
-            market.portfolios[i].averagePortfolioMarketValue();
-        }
-        
-        showPortfolio(market);
-        
-        
+        showPortfolio(market);     
     }
     
     private void addTextfields(Portfolio portfolio) {
