@@ -13,7 +13,7 @@ public class Portfolio {
     public String name;
     private int maxCount = 1;
     public Company[] companies = new Company[maxCount];
-    private double[] portfolioReturns = new double[12];
+    public double[] portfolioReturns = new double[12];
     private double[] portfolioMarketValue = new double[12];
     private int period = 8;
     public double averagePortfolioReturn;
@@ -101,6 +101,28 @@ public class Portfolio {
             portfolioMarketValue[i] += companies[j].marketValues[month];
             }
         }
+    }
+    
+    /**
+     * @return returns the lowest mothly return of the portfolio on certain year
+     */
+    public double getMinValue() {
+        double min = Double.MAX_VALUE;
+        for(int i = 0; i < portfolioReturns.length; i++) {
+            if(portfolioReturns[i] < min) min = portfolioReturns[i];
+        }
+        return min;
+    }
+    
+    /**
+     * @return returns the highest mothly return of the portfolio on certain year
+     */
+    public double getMaxValue() {
+        double max = -Double.MAX_VALUE;
+        for(int i = 0; i < portfolioReturns.length; i++) {
+            if(portfolioReturns[i] > max) max = portfolioReturns[i];
+        }
+        return max;
     }
     
     @Override

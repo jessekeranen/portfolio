@@ -17,7 +17,7 @@ public class Market {
     public Portfolio[] portfolios = new Portfolio[portfolioMaxCount];
     private double[] beMeBreakPoints = new double[1];
     private double[] sizeBreakPoints = new double[1];
-    private Portfolio[][] years = new Portfolio[10][20];
+    public Portfolio[][] years = new Portfolio[10][20];
     
     /**
      * default constructor
