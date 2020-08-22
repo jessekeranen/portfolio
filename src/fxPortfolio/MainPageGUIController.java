@@ -54,12 +54,14 @@ public class MainPageGUIController {
         else {
             //showPortfolio(market);
             if(chooserPortfolios.getSelectedIndex() != -1) {
+                chooserCompanies.clear();
                 portfolioName.setText(market.years[0][chooserPortfolios.getSelectedIndex()].name); 
                 portfolioAveBeMe.setText("");
                 portfolioAveMarketValue.setText(market.periodPortfolioMV(chooserPortfolios.getSelectedIndex()));
                 portfolioAveReturn.setText(market.periodAverageReturn(chooserPortfolios.getSelectedIndex()));
                 }
             else {
+                chooserCompanies.clear();
                 portfolioName.setText(market.years[0][0].name); 
                 portfolioAveBeMe.setText("");
                 portfolioAveMarketValue.setText(market.periodPortfolioMV(0));
@@ -101,25 +103,25 @@ public class MainPageGUIController {
         portfolioAveReturn.setText(portfolio.averagePortfolioReturnString);
     }
     
-    private void showPortfolio(Market market) {
+    private void showPortfolio(Market mrkt) {
         chooserPortfolios.clear();
         int number = comboBox.getSelectedIndex();
-        if(market == null) return; 
+        if(mrkt == null) return; 
         
         if (number ==  -1) {
             number = 0;
         }
         
         if(number != comboBoxCount-1) {
-            for(int i = 0; i < market.portfolioCount; i++) {
-                chooserPortfolios.add(market.years[number][i].name, market.years[number][i]);
+            for(int i = 0; i < mrkt.portfolioCount; i++) {
+                chooserPortfolios.add(mrkt.years[number][i].name, mrkt.years[number][i]);
             }
-            showCompanies(market.years[number][0]);  
-            loadData(market.years[number][0]);
+            showCompanies(mrkt.years[number][0]);  
+            loadData(mrkt.years[number][0]);
         }
         else {
-            for(int i = 0; i < market.portfolioCount; i++) {
-                chooserPortfolios.add(market.years[0][i].name, market.years[0][i]);
+            for(int i = 0; i < mrkt.portfolioCount; i++) {
+                chooserPortfolios.add(mrkt.years[0][i].name, mrkt.years[0][i]);
             }
             show();
         }
