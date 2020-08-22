@@ -18,7 +18,8 @@ public class Market {
     private double[] beMeBreakPoints = new double[1];
     private double[] sizeBreakPoints = new double[1];
     public Portfolio[][] years = new Portfolio[10][20];
-    
+    public double[][] periodPortfolioRetruns = new double[4][36]; 
+    public double[] a = new double[47];
     /**
      * default constructor
      */
@@ -142,6 +143,26 @@ public class Market {
             sizeBreakPoints[j] = sizeRatios[amount];
             amount += amount;
         }
+    }
+    
+    public void periodPortfolioReturns() { 
+        for(int j = 0; j < 4; j++) {
+            int beginning = 0; 
+            for(int i = 0; i < 3; i++) {
+                System.arraycopy(years[i][j].portfolioReturns, 0, periodPortfolioRetruns[j], beginning, years[i][j].portfolioReturns.length);
+                beginning += years[i][j].portfolioReturns.length-1;
+            }
+        }
+    }
+    
+    public String periodAverageReturn(int number) {
+        periodPortfolioReturns();
+        double average = 0;
+        for(int i = 0; i < periodPortfolioRetruns[number].length; i++) {
+            average += periodPortfolioRetruns[number][i];
+        }
+        average = average/periodPortfolioRetruns[number].length;
+        return String.format("%.5f", average);
     }
     
     @Override

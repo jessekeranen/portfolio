@@ -39,14 +39,32 @@ public class MainPageGUIController {
     @FXML private ComboBoxChooser<String> comboBox;
     
     @FXML private void whichYear() {
-        showPortfolio(market);
+        showPortfolio(market);        
     }
     
     @FXML
-    private void show() {
+    private void show() {           
+        int number = comboBox.getSelectedIndex();
+        if(number != comboBox.getVisibleRowCount()) {
         currentPortfolio = chooserPortfolios.getSelectedObject();
         loadData(currentPortfolio);
-        showCompanies(currentPortfolio);
+        showCompanies(currentPortfolio);  
+        }
+        else {
+            //showPortfolio(market);
+            if(chooserPortfolios.getSelectedIndex() != -1) {
+                portfolioName.setText(market.years[0][chooserPortfolios.getSelectedIndex()].name); 
+                portfolioAveBeMe.setText("");
+                portfolioAveMarketValue.setText("");
+                portfolioAveReturn.setText(market.periodAverageReturn(chooserPortfolios.getSelectedIndex()));
+                }
+            else {
+                portfolioName.setText(market.years[0][0].name); 
+                    portfolioAveBeMe.setText("");
+                    portfolioAveMarketValue.setText("");
+                    portfolioAveReturn.setText(market.periodAverageReturn(0));
+            }
+        }      
     }
     
     private Market market;
@@ -66,10 +84,10 @@ public class MainPageGUIController {
         
         comboBox.clear();
         for(int i = 0; i < market.years.length; i++) {
-            comboBox.add("Year " + (i+1));
-            comboBox.getSelectionModel().select(0);
+            comboBox.add("Year " + (i+1)); 
         }
-        
+        comboBox.add("whole period");
+        comboBox.getSelectionModel().select(0);
         showPortfolio(market);     
     }
     
@@ -83,14 +101,22 @@ public class MainPageGUIController {
     private void showPortfolio(Market market) {
         chooserPortfolios.clear();
         int number = comboBox.getSelectedIndex();
-        if(market == null) return;
-        for(int i = 0; i < market.portfolioCount; i++) {
-            chooserPortfolios.add(market.years[number][i].name, market.years[number][i]);
+        if(market == null) return; 
+        
+        if(comboBox.getSelectedIndex() != comboBox.getVisibleRowCount()) {
+            for(int i = 0; i < market.portfolioCount; i++) {
+                chooserPortfolios.add(market.years[number][i].name, market.years[number][i]);
+            }
+                showCompanies(market.years[number][0]);  
+                loadData(market.years[number][0]);
+            }
+        else {
+            for(int i = 0; i < market.portfolioCount; i++) {
+                chooserPortfolios.add(market.years[0][i].name, market.years[0][i]);
+            }
+            //loadData(market.years[number][0]);
         }
-        showCompanies(market.years[number][0]);  
-        loadData(market.years[number][0]);
     }
-    
     
     
     private void showCompanies(Portfolio portfolio) {

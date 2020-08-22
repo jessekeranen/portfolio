@@ -26,6 +26,7 @@ public class Company {
     private double[] bookValues;
     protected double[] returns;
     protected double[] beMeRatios;
+    protected static int rows;
     
     public Company(File file, int number) {
         try  
@@ -37,7 +38,7 @@ public class Company {
         XSSFRow row;
         XSSFCell cell;
         
-        int rows; // No of rows
+       
         rows = sheet.getPhysicalNumberOfRows();
         years = rows/12;
         
