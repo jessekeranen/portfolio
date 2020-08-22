@@ -15,16 +15,28 @@ public class Market {
     private int portfolioMaxCount = 1;
     public Company[] companies = new Company[companyMaxCount];
     public Portfolio[] portfolios = new Portfolio[portfolioMaxCount];
-    private double[] beMeBreakPoints = new double[1];
-    private double[] sizeBreakPoints = new double[1];
-    public Portfolio[][] years = new Portfolio[10][20];
-    public double[][] periodPortfolioRetruns = new double[4][36]; 
-    public double[] a = new double[47];
+    private double[] beMeBreakPoints;
+    private double[] sizeBreakPoints;
+    public Portfolio[][] years;
+    public double[][] periodPortfolioRetruns;
+    private int MarketValueCounts;
+    private int BeMeCounts;        
+    
     /**
      * default constructor
+     * @param MarketValueCounts number of market value break points
+     * @param BeMeCounts number of Be/Me break points
+     * @param months number of months
      */
-    public Market() {
-        //
+    public Market(int MarketValueCounts, int BeMeCounts, int months) {
+        this.MarketValueCounts = MarketValueCounts;
+        this.BeMeCounts = BeMeCounts;
+        portfolioCount = MarketValueCounts*BeMeCounts;
+        int yearCount =  months/12;
+        this.years = new Portfolio[yearCount][portfolioCount];
+        this.periodPortfolioRetruns = new double[portfolioCount][months];
+        this.beMeBreakPoints = new double[BeMeCounts-1];
+        this.sizeBreakPoints = new double[MarketValueCounts-1];
     }
     
     /**
@@ -72,8 +84,8 @@ public class Market {
     }
     
     public void adjustPortfolios() {
-        for(int size = 1; size < 3; size++) {
-            for(int value = 1; value < 3; value++) {
+        for(int size = 1; size < MarketValueCounts+1; size++) {
+            for(int value = 1; value < BeMeCounts+1; value++) {
                 Portfolio portfolio = new Portfolio(size, value);
                 addPortfolio(portfolio);
             }
@@ -155,6 +167,15 @@ public class Market {
         }
     }
     
+    public String periodPortfolioMV(int number) {
+        double average = 0;
+        for(int i = 0; i < years.length; i++) {
+            average += years[i][number].averagePortfolioMarketValue;
+        }
+        average = average/years.length;
+        return String.format("%.2f", average);
+    }
+    
     public String periodAverageReturn(int number) {
         periodPortfolioReturns();
         double average = 0;
@@ -178,7 +199,7 @@ public class Market {
      * @param args ei käytössä
      */
     public static void main(String[] args) {
-        Market one = new Market();
+        //Market one = new Market();
         
         //one.beMeBreakPoints(1);
         //one.sizeBreakPoints(1);
@@ -188,7 +209,7 @@ public class Market {
         //one.addPortfolio(port);
         //one.constructPortfolio(port, 1, 1, 1);
         //System.out.println(port);
-        System.out.println(one);
+        //System.out.println(one);
         
         
     }

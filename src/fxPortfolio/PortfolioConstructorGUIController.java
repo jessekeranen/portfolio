@@ -29,6 +29,15 @@ public class PortfolioConstructorGUIController {
 
     @FXML
     private TextField textBox;
+    
+    @FXML
+    private TextField MVCount;
+    
+    @FXML
+    private TextField BeMeCount;
+    
+    @FXML
+    private TextField months;
 
     @FXML
     private Button okButton;
@@ -46,7 +55,14 @@ public class PortfolioConstructorGUIController {
         window.setScene(scene);
         window.show();
         
-        Market market = new Market();
+        //int MarketValueCount = Integer.valueOf(MVCount.getText()); 
+        //int monthCount = Integer.valueOf(months.getText()); 
+        //int BeMeCounts = Integer.valueOf(BeMeCount.getText()); 
+        int MarketValueCount = 2;
+        int monthCount = 36;
+        int BeMeCounts = 2;
+        
+        Market market = new Market(MarketValueCount, BeMeCounts, monthCount);
         
         try  
         {  

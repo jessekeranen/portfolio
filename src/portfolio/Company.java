@@ -26,7 +26,7 @@ public class Company {
     private double[] bookValues;
     protected double[] returns;
     protected double[] beMeRatios;
-    protected static int rows;
+    public static int rows;
     
     public Company(File file, int number) {
         try  

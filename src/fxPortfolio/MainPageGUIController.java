@@ -39,30 +39,31 @@ public class MainPageGUIController {
     @FXML private ComboBoxChooser<String> comboBox;
     
     @FXML private void whichYear() {
-        showPortfolio(market);        
+        showPortfolio(market); 
     }
     
     @FXML
     private void show() {           
         int number = comboBox.getSelectedIndex();
-        if(number != comboBox.getVisibleRowCount()) {
-        currentPortfolio = chooserPortfolios.getSelectedObject();
-        loadData(currentPortfolio);
-        showCompanies(currentPortfolio);  
+        
+        if(number != comboBoxCount-1) {
+            currentPortfolio = chooserPortfolios.getSelectedObject();
+            loadData(currentPortfolio);
+            showCompanies(currentPortfolio);  
         }
         else {
             //showPortfolio(market);
             if(chooserPortfolios.getSelectedIndex() != -1) {
                 portfolioName.setText(market.years[0][chooserPortfolios.getSelectedIndex()].name); 
                 portfolioAveBeMe.setText("");
-                portfolioAveMarketValue.setText("");
+                portfolioAveMarketValue.setText(market.periodPortfolioMV(chooserPortfolios.getSelectedIndex()));
                 portfolioAveReturn.setText(market.periodAverageReturn(chooserPortfolios.getSelectedIndex()));
                 }
             else {
                 portfolioName.setText(market.years[0][0].name); 
-                    portfolioAveBeMe.setText("");
-                    portfolioAveMarketValue.setText("");
-                    portfolioAveReturn.setText(market.periodAverageReturn(0));
+                portfolioAveBeMe.setText("");
+                portfolioAveMarketValue.setText(market.periodPortfolioMV(0));
+                portfolioAveReturn.setText(market.periodAverageReturn(0));
             }
         }      
     }
@@ -70,6 +71,7 @@ public class MainPageGUIController {
     private Market market;
     private Portfolio currentPortfolio;
     private XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
+    private int comboBoxCount = 1;
     
     /**
      * @param market market that contains all the companies of the data
@@ -85,6 +87,7 @@ public class MainPageGUIController {
         comboBox.clear();
         for(int i = 0; i < market.years.length; i++) {
             comboBox.add("Year " + (i+1)); 
+            comboBoxCount += 1;
         }
         comboBox.add("whole period");
         comboBox.getSelectionModel().select(0);
@@ -103,18 +106,22 @@ public class MainPageGUIController {
         int number = comboBox.getSelectedIndex();
         if(market == null) return; 
         
-        if(comboBox.getSelectedIndex() != comboBox.getVisibleRowCount()) {
+        if (number ==  -1) {
+            number = 0;
+        }
+        
+        if(number != comboBoxCount-1) {
             for(int i = 0; i < market.portfolioCount; i++) {
                 chooserPortfolios.add(market.years[number][i].name, market.years[number][i]);
             }
-                showCompanies(market.years[number][0]);  
-                loadData(market.years[number][0]);
-            }
+            showCompanies(market.years[number][0]);  
+            loadData(market.years[number][0]);
+        }
         else {
             for(int i = 0; i < market.portfolioCount; i++) {
                 chooserPortfolios.add(market.years[0][i].name, market.years[0][i]);
             }
-            //loadData(market.years[number][0]);
+            show();
         }
     }
     
