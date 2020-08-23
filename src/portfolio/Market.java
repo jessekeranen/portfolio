@@ -56,7 +56,6 @@ public class Market {
                 companies = companies2;
                 companyCount++;
             }
-        
     }
     
     /**
@@ -79,10 +78,12 @@ public class Market {
         else {
             portfolios[0] = portfolio;
             portfolioCount = 1;
-        }
-        
+        }        
     }
     
+    /**
+     * Constructs amount of portfolios depending on user input in portfolio constructor 
+     */
     public void adjustPortfolios() {
         for(int size = 1; size < MarketValueCounts+1; size++) {
             for(int value = 1; value < BeMeCounts+1; value++) {
@@ -93,10 +94,10 @@ public class Market {
     }
     
     /**
-     * @param port portfolio in which certain companies are added
+     * Adds companies to the portfolio depending on their market and book values
      * @param period which year
      */
-    public void constructPortfolios(Portfolio[] port, int period) {
+    public void constructPortfolios( int period) {
         int year = period+1;
         adjustPortfolios();
         beMeBreakPoints(year);
@@ -116,6 +117,11 @@ public class Market {
         addPortfolios(portfolios, period);
     }
     
+    /**
+     * Adds portfolios from certain year to an array
+     * @param port portfolio array that is added to the array
+     * @param year which years portfolios  are added to the array
+     */
     public void addPortfolios(Portfolio[] port, int year) {
         years[year] = port;
     }
@@ -157,6 +163,9 @@ public class Market {
         }
     }
     
+    /**
+     * Calculates portfolio returns for each portfoio for whole period. 
+     */
     public void periodPortfolioReturns() { 
         for(int j = 0; j < 4; j++) {
             int beginning = 0; 
@@ -167,6 +176,11 @@ public class Market {
         }
     }
     
+    /**
+     * Calculates portfolios average market value for whole period
+     * @param number which portfiolios average market value is calculated
+     * @return average market value
+     */
     public String periodPortfolioMV(int number) {
         double average = 0;
         for(int i = 0; i < years.length; i++) {
@@ -176,6 +190,11 @@ public class Market {
         return String.format("%.2f", average);
     }
     
+    /**
+     * Calculates portfolios average book value for whole period
+     * @param number which portfiolios average book value is calculated
+     * @return average book value
+     */
     public String periodAverageReturn(int number) {
         periodPortfolioReturns();
         double average = 0;

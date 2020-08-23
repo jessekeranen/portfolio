@@ -90,7 +90,7 @@ public class MainPageGUIController {
         //chooserPortfolios.addSelectionListener(e-> showPortfolio(market));
         
         for(int i = 0; i < Company.years; i++) {
-            market.constructPortfolios(market.portfolios, i);
+            market.constructPortfolios( i);
         }
         
         comboBox.clear();
@@ -145,22 +145,7 @@ public class MainPageGUIController {
     }
     
     private void loadData(Portfolio port) {
-        pane.getChildren().clear();
-        chart.getData().clear();
-        series.getData().clear();
-        
-        NumberAxis xAxis = new NumberAxis(1,12,1);
-        xAxis.setLabel("month");
-        NumberAxis yAxis = new NumberAxis(port.getMinValue(),port.getMaxValue(),1);
-        yAxis.setLabel("return");
-        ayis = yAxis;
-        axis = xAxis;
-        for(int i = 0; i < port.portfolioReturns.length; i++) {
-            series.getData().add(new XYChart.Data<>(i, port.portfolioReturns[i]));
-        }
-        
-        chart.getData().add(series);
-        pane.getChildren().addAll(chart);
+       loadData(port.portfolioReturns);
     }   
     
     private void loadData(double[] array) {

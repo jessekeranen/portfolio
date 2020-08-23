@@ -28,6 +28,11 @@ public class Company {
     protected double[] beMeRatios;
     public static int rows;
     
+    /**
+     * Reads the input file and adds the information for the file to certain company
+     * @param file where the ifomration is read
+     * @param number indicates different companies
+     */
     public Company(File file, int number) {
         try  
         {  
@@ -101,14 +106,31 @@ public class Company {
         return bemeRatios;
     }
     
+    /**
+     * subroutine to calculate the book values of the company
+     * @param number indicates different companies
+     * @return book values of the company
+     */
     public double[] bookValues(int number) {
         return reader("/Users/jessekeranen/projects/Työkirja8.xlsx", number);
     }
     
+    /**
+     * subroutine to calculate the market values of the company
+     * @param number indicates different companies
+     * @return market values of the company
+     */
     public double[] marketValues(int number) {
         return reader("/Users/jessekeranen/projects/Työkirja9.xlsx", number);
     }
     
+    /**
+     * Reads the input file and adds the information depending on the input file to the company.
+     * @param file2 where the infomation is read
+     * @param number indicates the company
+     * @return Array of the market vakues or book values depending on the input file.
+     */
+    @SuppressWarnings("resource")
     public double[] reader(String file2, int number) {
         try  
         {  
