@@ -44,7 +44,12 @@ public class MainPageGUIController {
     
     @FXML
     private void show() {           
-        int number = comboBox.getSelectedIndex();
+        int number = comboBox.getSelectedIndex();      
+        currentPortfolio = chooserPortfolios.getSelectedObject();
+        
+        if(chooserPortfolios.getSelectedObject() == null) { 
+            chooserPortfolios.getSelectionModel().select(0);
+        }
         
         if(number != comboBoxCount-1) {
             currentPortfolio = chooserPortfolios.getSelectedObject();
@@ -59,6 +64,7 @@ public class MainPageGUIController {
                 portfolioAveBeMe.setText("");
                 portfolioAveMarketValue.setText(market.periodPortfolioMV(chooserPortfolios.getSelectedIndex()));
                 portfolioAveReturn.setText(market.periodAverageReturn(chooserPortfolios.getSelectedIndex()));
+                loadData(market.periodPortfolioRetruns[chooserPortfolios.getSelectedIndex()]);
                 }
             else {
                 chooserCompanies.clear();
@@ -66,6 +72,7 @@ public class MainPageGUIController {
                 portfolioAveBeMe.setText("");
                 portfolioAveMarketValue.setText(market.periodPortfolioMV(0));
                 portfolioAveReturn.setText(market.periodAverageReturn(0));
+                loadData(market.periodPortfolioRetruns[0]);
             }
         }      
     }
@@ -155,5 +162,24 @@ public class MainPageGUIController {
         chart.getData().add(series);
         pane.getChildren().addAll(chart);
     }   
+    
+    private void loadData(double[] array) {
+        pane.getChildren().clear();
+        chart.getData().clear();
+        series.getData().clear();
+        
+        NumberAxis xAxis = new NumberAxis(1,market.periodPortfolioRetruns[0].length ,1);
+        xAxis.setLabel("month");
+        NumberAxis yAxis = new NumberAxis(-10,10,1);
+        yAxis.setLabel("return");
+        ayis = yAxis;
+        axis = xAxis;
+        for(int i = 0; i < array.length; i++) {
+            series.getData().add(new XYChart.Data<>(i, array[i]));
+        }
+        
+        chart.getData().add(series);
+        pane.getChildren().addAll(chart);
+    }
     
 }
