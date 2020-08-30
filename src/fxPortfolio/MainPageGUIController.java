@@ -94,39 +94,8 @@ public class MainPageGUIController {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Portfolio returns");
         
-        Map<String, Object[]> data = new TreeMap<String, Object[]>();
-        data.put("1", new Object[]{"ID", "NAME", "LASTNAME"});
-        data.put("2", new Object[]{1, "Amit", "Shukla"});
-        data.put("3", new Object[]{2, "Lokesh", "Gupta"});
-        data.put("4", new Object[]{3, "John", "Adwards"});
-        data.put("5", new Object[]{4, "Brian", "Schultz"});
+        putData(sheet);        
         
-        Set<String> keyset = data.keySet();
-
-        int rownum = 0;
-        for (String key : keyset) 
-        {
-            //create a row of excelsheet
-            Row row = sheet.createRow(rownum++);
-
-            //get object array of prerticuler key
-            Object[] objArr = data.get(key);
-
-            int cellnum = 0;
-
-            for (Object obj : objArr) 
-            {
-                Cell cell = row.createCell(cellnum++);
-                if (obj instanceof String) 
-                {
-                    cell.setCellValue((String) obj);
-                }
-                else if (obj instanceof Integer) 
-                {
-                    cell.setCellValue((Integer) obj);
-                }
-            }
-        }
         try 
         {
             //Write the workbook in file system
@@ -141,6 +110,8 @@ public class MainPageGUIController {
         }
     }
     
+    
+
     private Market market;
     private Portfolio currentPortfolio;
     private XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
@@ -233,4 +204,54 @@ public class MainPageGUIController {
         pane.getChildren().addAll(chart);
     }
     
+    private void putData(XSSFSheet sheet) {
+        Map<String, Object[]> data = new TreeMap<String, Object[]>();
+        
+        putData(data);
+        
+        Set<String> keyset = data.keySet();
+
+        int rownum = 0;
+        for (String key : keyset) 
+        {
+            //create a row of excelsheet
+            Row row = sheet.createRow(rownum++);
+
+            //get object array of prerticuler key
+            Object[] objArr = data.get(key);
+
+            int cellnum = 0;
+
+            for (Object obj : objArr) 
+            {
+                Cell cell = row.createCell(cellnum++);
+                if (obj instanceof String) 
+                {
+                    cell.setCellValue((String) obj);
+                }
+                else if (obj instanceof Integer) 
+                {
+                    cell.setCellValue((Integer) obj);
+                }
+            }
+        }
+    }
+    
+    private void putData(Map<String, Object[]> data) {
+        Object[] names = new Object[market.periodPortfolioRetruns.length];
+        for(int i = 0; i < market.periodPortfolioRetruns.length; i++) {
+            names[i] = market.portfolios[i].name;
+        }
+        data.put("1", names);
+        
+        market.periodPortfolioReturns();
+        
+        for(int j = 0; j < market.periodPortfolioRetruns[0].length; j++) {
+            Object[] returns = new Object[market.periodPortfolioRetruns.length];
+            for(int k = 0; k < market.periodPortfolioRetruns.length; k++) {
+                returns[k] = Double.toString(market.periodPortfolioRetruns[k][j]);
+            }
+        data.put(Integer.toString(j+2), returns);
+        }
+    }
 }
