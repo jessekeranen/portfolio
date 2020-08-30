@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import fi.jyu.mit.fxgui.ListChooser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +42,7 @@ public class PortfolioConstructorGUIController {
     private Button okButton;
     
 
+    @SuppressWarnings("resource")
     @FXML
     void createCompanies(ActionEvent event) throws IOException {
           

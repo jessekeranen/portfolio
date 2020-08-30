@@ -1,16 +1,27 @@
 package fxPortfolio;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.DecimalFormat;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.ListChooser;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.util.StringConverter;
 import portfolio.Company;
 import portfolio.Market;
 import portfolio.Portfolio;
@@ -37,6 +48,7 @@ public class MainPageGUIController {
     @FXML private NumberAxis ayis;
     @FXML private LineChart<Number, Number> chart; 
     @FXML private ComboBoxChooser<String> comboBox;
+    @FXML private MenuItem print;
     
     @FXML private void whichYear() {
         showPortfolio(market); 
@@ -75,6 +87,58 @@ public class MainPageGUIController {
                 loadData(market.periodPortfolioRetruns[0]);
             }
         }      
+    }
+    
+    @FXML
+    private void printPotfolioReturns() {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Portfolio returns");
+        
+        Map<String, Object[]> data = new TreeMap<String, Object[]>();
+        data.put("1", new Object[]{"ID", "NAME", "LASTNAME"});
+        data.put("2", new Object[]{1, "Amit", "Shukla"});
+        data.put("3", new Object[]{2, "Lokesh", "Gupta"});
+        data.put("4", new Object[]{3, "John", "Adwards"});
+        data.put("5", new Object[]{4, "Brian", "Schultz"});
+        
+        Set<String> keyset = data.keySet();
+
+        int rownum = 0;
+        for (String key : keyset) 
+        {
+            //create a row of excelsheet
+            Row row = sheet.createRow(rownum++);
+
+            //get object array of prerticuler key
+            Object[] objArr = data.get(key);
+
+            int cellnum = 0;
+
+            for (Object obj : objArr) 
+            {
+                Cell cell = row.createCell(cellnum++);
+                if (obj instanceof String) 
+                {
+                    cell.setCellValue((String) obj);
+                }
+                else if (obj instanceof Integer) 
+                {
+                    cell.setCellValue((Integer) obj);
+                }
+            }
+        }
+        try 
+        {
+            //Write the workbook in file system
+            FileOutputStream out = new FileOutputStream(new File("/Users/jessekeranen/Projects/Työkirja10.xlsx"));
+            workbook.write(out);
+            out.close();
+            System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     
     private Market market;
@@ -153,12 +217,14 @@ public class MainPageGUIController {
         chart.getData().clear();
         series.getData().clear();
         
-        NumberAxis xAxis = new NumberAxis(1,market.periodPortfolioRetruns[0].length ,1);
+        
+        NumberAxis xAxis = new NumberAxis(1,market.periodPortfolioRetruns[0].length , 0.5);
         xAxis.setLabel("month");
         NumberAxis yAxis = new NumberAxis(-10,10,1);
         yAxis.setLabel("return");
         ayis = yAxis;
         axis = xAxis;
+         
         for(int i = 0; i < array.length; i++) {
             series.getData().add(new XYChart.Data<>(i, array[i]));
         }
