@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPortfolio.MainPageGUIController">
    <top>
@@ -64,6 +65,9 @@
                      <children>
                         <Label text="Name of the portfolio" />
                      </children>
+                     <BorderPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </BorderPane.margin>
                   </HBox>
                </top>
                <left>
@@ -76,18 +80,6 @@
          </center>
       </BorderPane>
    </left>
-   <right>
-      <ScrollPane prefHeight="302.0" prefWidth="212.0" BorderPane.alignment="CENTER">
-         <content>
-            <VBox prefHeight="301.0" prefWidth="218.0">
-               <children>
-                  <Label text="Name of the company" />
-                  <ListChooser fx:id="chooserCompanies" prefWidth="218.0" />
-               </children>
-            </VBox>
-         </content>
-      </ScrollPane>
-   </right>
    <center>
       <ScrollPane prefHeight="302.0" prefWidth="317.0" BorderPane.alignment="CENTER">
          <content>
@@ -152,9 +144,9 @@
       </ScrollPane>
    </center>
    <bottom>
-      <HBox prefHeight="47.0" prefWidth="765.0" BorderPane.alignment="CENTER">
+      <HBox BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox>
                <children>
                   <Button mnemonicParsing="false" text="Button">
                      <HBox.margin>
@@ -163,7 +155,7 @@
                   </Button>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox>
                <children>
                   <Button mnemonicParsing="false" text="Button">
                      <HBox.margin>
@@ -175,4 +167,16 @@
          </children>
       </HBox>
    </bottom>
+   <right>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name of the company">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </Text>
+            <ListChooser fx:id="chooserCompanies" rivit="" />
+         </children>
+      </VBox>
+   </right>
 </BorderPane>

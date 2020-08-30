@@ -102,7 +102,6 @@ public class MainPageGUIController {
             FileOutputStream out = new FileOutputStream(new File("/Users/jessekeranen/Projects/Työkirja10.xlsx"));
             workbook.write(out);
             out.close();
-            System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
         } 
         catch (Exception e)
         {
