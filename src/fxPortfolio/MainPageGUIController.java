@@ -2,7 +2,6 @@ package fxPortfolio;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -21,7 +20,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.util.StringConverter;
 import portfolio.Company;
 import portfolio.Market;
 import portfolio.Portfolio;
@@ -90,15 +88,14 @@ public class MainPageGUIController {
     }
     
     @FXML
-    private void printPotfolioReturns() {
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("Portfolio returns");
-        
-        putData(sheet);        
-        
-        try 
+    private void printPotfolioReturns() { 
+        try(XSSFWorkbook workbook = new XSSFWorkbook();) 
         {
+            XSSFSheet sheet = workbook.createSheet("Portfolio returns");
+        
+            putData(sheet);
             //Write the workbook in file system
+            @SuppressWarnings("resource")
             FileOutputStream out = new FileOutputStream(new File("/Users/jessekeranen/Projects/Työkirja10.xlsx"));
             workbook.write(out);
             out.close();
@@ -175,8 +172,8 @@ public class MainPageGUIController {
     private void showCompanies(Portfolio portfolio) {
         chooserCompanies.clear();
         if(portfolio == null) return;
-        for(int i = 0; i < portfolio.companies.length; i++) {
-            chooserCompanies.add(portfolio.companies[i].name, portfolio.companies[i]);
+        for(int i = 0; i < portfolio.companies.size(); i++) {
+            chooserCompanies.add(portfolio.companies.get(i).name, portfolio.companies.get(i));
         }
         addTextfields(portfolio);
     }

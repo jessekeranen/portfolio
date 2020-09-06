@@ -1,7 +1,6 @@
 package portfolio;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -18,6 +17,8 @@ public class Market {
     /**
     *  Number of portfolios */
     public int portfolioCount = 0;
+    /**
+     * Maximum number of the portfolios */
     public int portfolioMaxCount;
     /**
      * Array o companies */
@@ -30,6 +31,9 @@ public class Market {
     /**
      * Two dimensional array of the portfolio for each year */
     public Portfolio[][] years;
+    private int yearCount;
+    /**
+     * From how many months does the data consist */
     public int months;
     /**
      * Two dimensional array of the portfolio retruns for whole period for each portfolio */
@@ -48,10 +52,10 @@ public class Market {
         this.BeMeCounts = BeMeCounts;
         this.portfolioMaxCount = (MarketValueCounts*BeMeCounts);
         this.portfolios = new Portfolio[portfolioMaxCount];
-        int yearCount =  months/12;
+        this.yearCount =  months/12;
         this.months = months;
         this.years = new Portfolio[yearCount][portfolioCount];
-        this.periodPortfolioRetruns = new double[portfolioCount][months];
+        this.periodPortfolioRetruns = new double[portfolioMaxCount][months];
         this.beMeBreakPoints = new double[BeMeCounts-1];
         this.sizeBreakPoints = new double[MarketValueCounts-1];
     }
@@ -198,11 +202,11 @@ public class Market {
      * Calculates portfolio returns for each portfoio for whole period. 
      */
     public void periodPortfolioReturns() { 
-        for(int j = 0; j < 4; j++) {
+        for(int j = 0; j < portfolioMaxCount; j++) {
             int beginning = 0; 
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < yearCount; i++) {
                 System.arraycopy(years[i][j].portfolioReturns, 0, periodPortfolioRetruns[j], beginning, years[i][j].portfolioReturns.length);
-                beginning += years[i][j].portfolioReturns.length-1;
+                beginning += years[i][j].portfolioReturns.length;
             }
         }
     }
@@ -259,8 +263,6 @@ public class Market {
         //one.addPortfolio(port);
         //one.constructPortfolio(port, 1, 1, 1);
         //System.out.println(port);
-        //System.out.println(one);
-        
-        
+        //System.out.println(one);     
     }
 }

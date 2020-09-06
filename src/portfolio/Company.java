@@ -1,12 +1,9 @@
 package portfolio;
 
-import java.io.File;  
-import java.io.FileInputStream;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;  
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;  
 
 /**
  * @author jessekeranen
@@ -15,29 +12,31 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class Company {
     
+    /** Number of years in data */
     public static int years;
+    /** Name of the company */
     public String name;
     private double[] prices;
+    /** Array of the market values of the company */
     protected double[] marketValues;
     private double[] bookValues;
+    /** Array of the monthly returns of the company */
     protected double[] returns;
+    /** Array of the Be/Mr-ratios of the company */
     protected double[] beMeRatios;
+    /** Number of the rows in data sheet */
     public static int rows;
     
     /**
-     * Reads the input file and adds the information for the file to certain company
-     * @param file where the ifomration is read
+     * Reads the input sheet and adds the information from the sheet to certain company
+     * @param sheet where the price information is read
+     * @param sheet2 where the book value information is read
+     * @param sheet3 where the market value information is read
      * @param number indicates different companies
      */
-    public Company(File file, int number) {
+    public Company(XSSFSheet sheet, XSSFSheet sheet2, XSSFSheet sheet3, int number) {
         try  
         {  
-        @SuppressWarnings("resource")
-        FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
-        //creating Workbook instance that refers to .xlsx file  
-        @SuppressWarnings("resource")
-        XSSFWorkbook wb = new XSSFWorkbook(fis);   
-        XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object
         XSSFRow row;
         XSSFCell cell;
         
@@ -73,8 +72,8 @@ public class Company {
                 
             }  
             returns = returns();
-            marketValues = marketValues(number);
-            bookValues = bookValues(number);  
+            marketValues = marketValues(sheet3, number);
+            bookValues = bookValues(sheet2, number);  
             beMeRatios = beMeRatio();
         }  
         catch(Exception e)  {  
@@ -112,38 +111,33 @@ public class Company {
     
     /**
      * subroutine to calculate the book values of the company
+     * @param sheet sheet that contains the information
      * @param number indicates different companies
      * @return book values of the company
      */
-    public double[] bookValues(int number) {
-        return reader("/Users/jessekeranen/projects/Työkirja8.xlsx", number);
+    public double[] bookValues(XSSFSheet sheet, int number) {
+        return reader(sheet, number);
     }
     
     /**
      * subroutine to calculate the market values of the company
+     * @param sheet sheet that contains the information
      * @param number indicates different companies
      * @return market values of the company
      */
-    public double[] marketValues(int number) {
-        return reader("/Users/jessekeranen/projects/Työkirja9.xlsx", number);
+    public double[] marketValues(XSSFSheet sheet, int number) {
+        return reader(sheet, number);
     }
     
     /**
      * Reads the input file and adds the information depending on the input file to the company.
-     * @param file2 where the infomation is read
+     * @param sheet where the infomation is read
      * @param number indicates the company
      * @return Array of the market vakues or book values depending on the input file.
      */
-    @SuppressWarnings("resource")
-    public double[] reader(String file2, int number) {
+    public double[] reader(XSSFSheet sheet, int number) {
         try  
-        {  
-        File file = new File(file2);
-        //File file = new File(textBox.getText());   //creating a new file instance  
-        FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
-        //creating Workbook instance that refers to .xlsx file  
-        XSSFWorkbook wb = new XSSFWorkbook(fis);   
-        XSSFSheet sheet = wb.getSheetAt(0);
+        {
         XSSFCell cell;
         
         int rowIndex = 0;

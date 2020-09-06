@@ -1,5 +1,7 @@
 package portfolio;
 
+import java.util.ArrayList;
+
 /**
  * @author jessekeranen
  * @version 22.7.2020
@@ -7,16 +9,20 @@ package portfolio;
  */
 public class Portfolio {
     
-    public int count = 0;
+    /** Name of the portfolio. Indicates the size and value of the companies in it */
     public String name;
-    private int maxCount = 1;
-    public Company[] companies = new Company[maxCount];
+    /** Array that includes all the companies that portfolio consist of */
+    public ArrayList<Company> companies = new ArrayList<Company>();
+    /** Weighted monthly average portfolio return */
     public double[] portfolioReturns = new double[12];
     private double[] portfolioMarketValue = new double[12];
-    private int period = 8;
+    /** Mean of the portfolio returns */
     public double averagePortfolioReturn;
+    /** String value of the mean of the portfolio returns */
     public String averagePortfolioReturnString;
+    /** Mean of the portfolio market values */
     public double averagePortfolioMarketValue;
+    /** String value of the mean of the portfolio market values */
     public String averagePortfolioMarketValueString;
     
     /**
@@ -33,19 +39,7 @@ public class Portfolio {
      * @param company company that is added to the portfolio
      */
     public void addCompany(Company company) {
-        if(count < maxCount) {
-        companies[count] = company;
-        count++;
-        }
-        else {
-            Company[] companies2 = new Company[count+1];
-            for(int i = 0; i < companies.length; i++) {
-                    companies2[i] = companies[i];
-            }
-            companies2[count] = company;
-            companies = companies2;
-            count++;
-        }
+        companies.add(company);
     }
     
     /**
@@ -53,9 +47,9 @@ public class Portfolio {
      */
     public void portfolioReturn() {
         for(int i = 0; i < 12; i++) {
-            for(int j = 0; j < companies.length; j++) {
+            for(int j = 0; j < companies.size(); j++) {
                 int month = i+11;
-                portfolioReturns[i] += companies[j].returns[month]*(companies[j].marketValues[month]/portfolioMarketValue[i]); 
+                portfolioReturns[i] += companies.get(j).returns[month]*(companies.get(j).marketValues[month]/portfolioMarketValue[i]); 
             }
         }
     }
@@ -104,9 +98,9 @@ public class Portfolio {
      */
     public void portfolioMarketValue() {
         for(int i = 0; i < 12; i++) {
-            for(int j = 0; j < companies.length; j++) {
+            for(int j = 0; j < companies.size(); j++) {
                 int month = i+11;
-            portfolioMarketValue[i] += companies[j].marketValues[month];
+            portfolioMarketValue[i] += companies.get(j).marketValues[month];
             }
         }
     }
@@ -136,8 +130,8 @@ public class Portfolio {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for(int i = 0; i < companies.length; i++) {
-            s.append(companies[i].name);
+        for(int i = 0; i < companies.size(); i++) {
+            s.append(companies.get(i).name);
         }
         return s.toString();
     }
