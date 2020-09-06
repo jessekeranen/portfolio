@@ -21,7 +21,7 @@
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the path of the company return file here:">
                <VBox.margin>
-                  <Insets left="5.0" right="5.0" top="5.0" />
+                  <Insets left="10.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Text>
             <TextField fx:id="textBoxReturns">
@@ -31,7 +31,7 @@
             </TextField>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the path of the company market values file here:">
                <VBox.margin>
-                  <Insets left="5.0" right="5.0" top="5.0" />
+                  <Insets left="10.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Text>
             <TextField fx:id="textBoxMV">
@@ -41,7 +41,7 @@
             </TextField>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter the path of the company book values file here:">
                <VBox.margin>
-                  <Insets left="5.0" right="5.0" top="5.0" />
+                  <Insets left="10.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Text>
             <TextField fx:id="textBoxBV">
@@ -53,16 +53,7 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of months in data" />
-                        <TextField fx:id="months" />
-                     </children>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of market value break points" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number of market value breakpoints" />
                         <TextField fx:id="MVCount" />
                      </children>
                      <HBox.margin>

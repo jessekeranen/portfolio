@@ -10,39 +10,31 @@ import java.util.Collections;
  */
 public class Market {
     
-    /**
-     * Number of companies */
+    /** Number of companies */
     public int companyCount;
     private int companyMaxCount = 1;
-    /**
-    *  Number of portfolios */
+    /** Number of portfolios */
     public int portfolioCount = 0;
-    /**
-     * Maximum number of the portfolios */
+    /** Maximum number of the portfolios */
     public int portfolioMaxCount;
-    /**
-     * Array o companies */
+    /** Array o companies */
     public Company[] companies = new Company[companyMaxCount];
-    /**
-     * Array of portfolios */
+    /** Array of portfolios */
     public Portfolio[] portfolios;
     private double[] beMeBreakPoints;
     private double[] sizeBreakPoints;
-    /**
-     * Two dimensional array of the portfolio for each year */
+    /** Two dimensional array of the portfolio for each year */
     public Portfolio[][] years;
     private int yearCount;
-    /**
-     * From how many months does the data consist */
+    /** From how many months does the data consist */
     public int months;
-    /**
-     * Two dimensional array of the portfolio retruns for whole period for each portfolio */
+    /** Two dimensional array of the portfolio retruns for whole period for each portfolio */
     public double[][] periodPortfolioRetruns;
     private int MarketValueCounts;
     private int BeMeCounts;        
     
     /**
-     * default constructor
+     * Constructor
      * @param MarketValueCounts number of market value break points
      * @param BeMeCounts number of Be/Me break points
      * @param months number of months
@@ -114,7 +106,7 @@ public class Market {
             int size = size(companies[i].marketValues[year]);
             int beme = beMe(companies[i].beMeRatios[year]);
             if(companies[i].marketValues[year] != 0) {
-                portfolios[size*MarketValueCounts+beme].addCompany(companies[i]);
+                portfolios[size*BeMeCounts+beme].addCompany(companies[i]);
             }    
         }
         for( int i = 0; i < portfolios.length; i++) {
@@ -250,7 +242,7 @@ public class Market {
     }
     
     /**
-     * @param args ei käytössä
+     * @param args not used
      */
     public static void main(String[] args) {
         //Market one = new Market();
