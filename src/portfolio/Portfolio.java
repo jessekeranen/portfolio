@@ -1,7 +1,5 @@
 package portfolio;
 
-import java.util.Arrays;
-
 /**
  * @author jessekeranen
  * @version 22.7.2020
@@ -52,9 +50,8 @@ public class Portfolio {
     
     /**
      * calculates monthly weighted returns of the portfolio
-     * @param year year
      */
-    public void portfolioReturn(int year) {
+    public void portfolioReturn() {
         for(int i = 0; i < 12; i++) {
             for(int j = 0; j < companies.length; j++) {
                 int month = i+11;
@@ -63,6 +60,9 @@ public class Portfolio {
         }
     }
     
+    /**
+     * Calculates the average portfolio return
+     */
     public void averagePortfolioReturn() {
         double average = 0;
         for(int i = 0; i < portfolioReturns.length; i++) {
@@ -72,11 +72,17 @@ public class Portfolio {
         averagePortfolioReturnString();
     }
     
+    /**
+     * Changes the average portfolio return from double to string
+     */
     public void averagePortfolioReturnString() {
         String string = String.format("%.5f", averagePortfolioReturn);
         this.averagePortfolioReturnString = String.valueOf(string);
     }
     
+    /**
+     * Calculates the average portfolio market value
+     */
     public void averagePortfolioMarketValue() {
         double average = 0;
         for(int i = 0; i < portfolioMarketValue.length; i++) {
@@ -86,15 +92,17 @@ public class Portfolio {
         averagePortfolioMarketValueString();
     }
     
+    /**
+     * Changes the average portfolio market value from double to string
+     */
     public void averagePortfolioMarketValueString() {
         String string = String.format("%.2f", averagePortfolioMarketValue);
         this.averagePortfolioMarketValueString = String.valueOf(string);    }
     
     /**
      * calculates total market value of the portfolio
-     * @param year year
      */
-    public void portfolioMarketValue(int year) {
+    public void portfolioMarketValue() {
         for(int i = 0; i < 12; i++) {
             for(int j = 0; j < companies.length; j++) {
                 int month = i+11;

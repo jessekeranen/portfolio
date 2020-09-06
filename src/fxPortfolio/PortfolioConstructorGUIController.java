@@ -59,7 +59,7 @@ public class PortfolioConstructorGUIController {
         //int monthCount = Integer.valueOf(months.getText()); 
         //int BeMeCounts = Integer.valueOf(BeMeCount.getText()); 
         int MarketValueCount = 2;
-        int monthCount = 36;
+        int monthCount = 87;
         int BeMeCounts = 2;
         
         Market market = new Market(MarketValueCount, BeMeCounts, monthCount);

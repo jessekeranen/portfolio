@@ -124,7 +124,7 @@ public class MainPageGUIController {
         //chooserPortfolios.addSelectionListener(e-> showPortfolio(market));
         
         for(int i = 0; i < Company.years; i++) {
-            market.constructPortfolios( i);
+            market.constructPortfolios(i);
         }
         
         comboBox.clear();
@@ -153,15 +153,18 @@ public class MainPageGUIController {
             number = 0;
         }
         
+        /**
+         * Checks if we want to examine specific year or whole period
+         */
         if(number != comboBoxCount-1) {
-            for(int i = 0; i < mrkt.portfolioCount; i++) {
+            for(int i = 0; i < mrkt.portfolioMaxCount; i++) {
                 chooserPortfolios.add(mrkt.years[number][i].name, mrkt.years[number][i]);
             }
             showCompanies(mrkt.years[number][0]);  
             loadData(mrkt.years[number][0]);
         }
         else {
-            for(int i = 0; i < mrkt.portfolioCount; i++) {
+            for(int i = 0; i < mrkt.portfolioMaxCount; i++) {
                 chooserPortfolios.add(mrkt.years[0][i].name, mrkt.years[0][i]);
             }
             show();
@@ -188,7 +191,7 @@ public class MainPageGUIController {
         series.getData().clear();
         
         
-        NumberAxis xAxis = new NumberAxis(1,market.periodPortfolioRetruns[0].length , 0.5);
+        NumberAxis xAxis = new NumberAxis(1,market.months , 0.5);
         xAxis.setLabel("month");
         NumberAxis yAxis = new NumberAxis(-10,10,1);
         yAxis.setLabel("return");

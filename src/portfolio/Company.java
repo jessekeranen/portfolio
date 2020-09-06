@@ -2,11 +2,7 @@ package portfolio;
 
 import java.io.File;  
 import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.Iterator;  
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;  
@@ -36,8 +32,10 @@ public class Company {
     public Company(File file, int number) {
         try  
         {  
+        @SuppressWarnings("resource")
         FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file  
         //creating Workbook instance that refers to .xlsx file  
+        @SuppressWarnings("resource")
         XSSFWorkbook wb = new XSSFWorkbook(fis);   
         XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object
         XSSFRow row;
@@ -66,14 +64,17 @@ public class Company {
                 if(cell.getCellTypeEnum() == CellType.NUMERIC) {
                     prices[rowIndex-1] = cell.getNumericCellValue();
                 }
+                if(cell.getCellTypeEnum() == CellType.STRING && cell.toString().equals("NA")) {
+                    prices[rowIndex-1] = -Double.MAX_VALUE;
+                }
                 else if(cell.getCellTypeEnum() == CellType.STRING) {
                     name = cell.toString();
                 }
                 
             }  
             returns = returns();
-            bookValues = bookValues(number);
             marketValues = marketValues(number);
+            bookValues = bookValues(number);  
             beMeRatios = beMeRatio();
         }  
         catch(Exception e)  {  
@@ -100,8 +101,11 @@ public class Company {
      */
     public double[] beMeRatio() {
         double[] bemeRatios = new double[marketValues.length];
-        for (int i = 0; i < marketValues.length; i++) {
+        for (int i = 0; i < marketValues.length-1; i++) {
+            if(marketValues[i] != 0) {
             bemeRatios[i] =  bookValues[i]/marketValues[i];
+            }
+            else bemeRatios[i] = 0;
         }
         return bemeRatios;
     }
@@ -142,12 +146,19 @@ public class Company {
         XSSFSheet sheet = wb.getSheetAt(0);
         XSSFCell cell;
         
-        double[] array = new double[sheet.getPhysicalNumberOfRows()];
+        int rowIndex = 0;
+        double[] array = new double[sheet.getPhysicalNumberOfRows()-1];
         int columnIndex = number;
-        for (int rowIndex = 0; rowIndex<sheet.getPhysicalNumberOfRows(); rowIndex++){
+        for (rowIndex = 0; rowIndex<sheet.getPhysicalNumberOfRows()-1; rowIndex++){
             cell = sheet.getRow(rowIndex).getCell(columnIndex);
             if(cell.getCellTypeEnum() == CellType.NUMERIC) {
                 array[rowIndex] = cell.getNumericCellValue();
+                }
+            if(cell.toString().equals("NA")) {
+                array[rowIndex] = 0;
+                    if(marketValues != null) {
+                        marketValues[rowIndex] = 0;
+                    }   
                 }
             }
         return array;
