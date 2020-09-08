@@ -41,8 +41,7 @@ public class PortfolioConstructorGUIController {
     @FXML
     private Button okButton;
     
-    private Market market;
-    
+    private Market market;    
 
     @SuppressWarnings("resource")
     @FXML
@@ -60,8 +59,8 @@ public class PortfolioConstructorGUIController {
         //int MarketValueCount = Integer.valueOf(MVCount.getText()); 
         //int monthCount = Integer.valueOf(months.getText()); 
         //int BeMeCounts = Integer.valueOf(BeMeCount.getText()); 
-        int MarketValueCount = 4;
-        int BeMeCounts = 2;
+        int MarketValueCount = 3;
+        int BeMeCounts = 3;
         
         try  
         {  
@@ -82,12 +81,17 @@ public class PortfolioConstructorGUIController {
         XSSFWorkbook wb3 = new XSSFWorkbook(fis3);   
         XSSFSheet sheet3 = wb3.getSheetAt(0);
         
+        File file4 = new File("/Users/jessekeranen/projects/Työkirja9.xlsx"); 
+        FileInputStream fis4 = new FileInputStream(file4);  
+        XSSFWorkbook wb4 = new XSSFWorkbook(fis4);   
+        XSSFSheet sheet4 = wb4.getSheetAt(0);
+        
         int monthCount = sheet.getPhysicalNumberOfRows()-1;
         
         market = new Market(MarketValueCount, BeMeCounts, monthCount);
         
         for(int i = 0; i < sheet.getRow(1).getPhysicalNumberOfCells(); i++) {
-            Company company = new Company(sheet, sheet2, sheet3, i);
+            Company company = new Company(sheet, sheet2, sheet3, sheet4, i);
             market.addCompany(company);
             }
         }

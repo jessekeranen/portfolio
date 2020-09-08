@@ -30,7 +30,7 @@ public class PortfolioConstructorMain extends Application {
     }
 
     /**
-     * @param args Ei käytössä
+     * @param args not used
      */
     public static void main(String[] args) {
         launch(args);

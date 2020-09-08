@@ -26,20 +26,22 @@ public class Company {
     protected double[] beMeRatios;
     /** Number of the rows in data sheet */
     public static int rows;
+    @SuppressWarnings("unused")
+    private double[] dividends;
     
     /**
      * Reads the input sheet and adds the information from the sheet to certain company
      * @param sheet where the price information is read
      * @param sheet2 where the book value information is read
      * @param sheet3 where the market value information is read
+     * @param sheet4 where the dividend information is read
      * @param number indicates different companies
      */
-    public Company(XSSFSheet sheet, XSSFSheet sheet2, XSSFSheet sheet3, int number) {
+    public Company(XSSFSheet sheet, XSSFSheet sheet2, XSSFSheet sheet3, XSSFSheet sheet4, int number) {
         try  
         {  
         XSSFRow row;
-        XSSFCell cell;
-        
+        XSSFCell cell;        
        
         rows = sheet.getPhysicalNumberOfRows();
         years = rows/12;
@@ -71,6 +73,7 @@ public class Company {
                 }
                 
             }  
+            dividends = dividends(sheet4, number);
             returns = returns();
             marketValues = marketValues(sheet3, number);
             bookValues = bookValues(sheet2, number);  
@@ -83,7 +86,7 @@ public class Company {
     }
     
     /**
-     * calculates monthly return from prices of the stock
+     * calculates monthly returns from prices of the stock
      * @return array of the monthly returns
      */
     public double[] returns() {
@@ -107,6 +110,35 @@ public class Company {
             else bemeRatios[i] = 0;
         }
         return bemeRatios;
+    }
+    
+    /**     
+     * subroutine to calculate the book values of the company. DataStream shows same dividend 
+     * for each month. Because of that subroutine checks if the dividend is different than last 
+     * month and only after that adds it to the share price of the company. In case company pays same dividend
+     * in succesive years subroutine adds dividend to the share price of the if the dividend is added last time 
+     * 12 months ago
+     * @param sheet sheet that contains the information
+     * @param number indicates different companies
+     * @return array of the companys dividends
+     */
+    public double[] dividends(XSSFSheet sheet, int number) {
+        double[] array = reader(sheet, number);
+        int lastChange = 0;
+        for(int i = 1; i < prices.length; i++) {
+            if(array[i] != array[i-1]) {
+                //prices[i] += array[i];
+                lastChange = 0;
+            }
+            else if(lastChange == 12){
+                //prices[i] += array[i];
+                lastChange = 0;
+            }
+            else {
+                lastChange += 1;
+            }
+        }
+        return reader(sheet, number);
     }
     
     /**
@@ -148,7 +180,7 @@ public class Company {
             if(cell.getCellTypeEnum() == CellType.NUMERIC) {
                 array[rowIndex] = cell.getNumericCellValue();
                 }
-            if(cell.toString().equals("NA")) {
+            else if(cell.toString().equals("NA")) {
                 array[rowIndex] = 0;
                     if(marketValues != null) {
                         marketValues[rowIndex] = 0;
@@ -161,11 +193,10 @@ public class Company {
             e.printStackTrace();  
         }
         return null;
-    }
-    
+    } 
     
     /**
-     * @param args ei käytössä
+     * @param args not used
      */
     public static void main(String[] args) {
         //Company nokia = new Company("Työkirja7.xlsx", 1);

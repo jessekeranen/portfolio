@@ -13,10 +13,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.ListChooser;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -47,9 +49,16 @@ public class MainPageGUIController {
     @FXML private LineChart<Number, Number> chart; 
     @FXML private ComboBoxChooser<String> comboBox;
     @FXML private MenuItem print;
+    @FXML private Button exit;
+    @FXML private Button Print;
     
     @FXML private void whichYear() {
         showPortfolio(market); 
+    }
+    
+    @FXML private void exit() {
+        Platform.exit();
+        System.exit(0);
     }
     
     @FXML
@@ -136,7 +145,7 @@ public class MainPageGUIController {
     
     private void addTextfields(Portfolio portfolio) {
         portfolioName.setText(portfolio.name); 
-        portfolioAveBeMe.setText("");
+        portfolioAveBeMe.setText(portfolio.averagePortfolioBeMeString);
         portfolioAveMarketValue.setText(portfolio.averagePortfolioMarketValueString);
         portfolioAveReturn.setText(portfolio.averagePortfolioReturnString);
     }

@@ -12,13 +12,12 @@ public class Market {
     
     /** Number of companies */
     public int companyCount;
-    private int companyMaxCount = 1;
     /** Number of portfolios */
     public int portfolioCount = 0;
     /** Maximum number of the portfolios */
     public int portfolioMaxCount;
-    /** Array o companies */
-    public Company[] companies = new Company[companyMaxCount];
+    /** Array of companies */
+    public ArrayList<Company> companies = new ArrayList<Company>();
     /** Array of portfolios */
     public Portfolio[] portfolios;
     private double[] beMeBreakPoints;
@@ -56,19 +55,8 @@ public class Market {
      * @param company company that is added to the market portfolio
      */
     public void addCompany(Company company) {
-        if(companyCount < companyMaxCount) {
-            companies[companyCount] = company;
-            companyCount++;
-            }
-            else {
-                Company[] companies2 = new Company[companyCount+1];
-                for(int i = 0; i < companies.length; i++) {
-                        companies2[i] = companies[i];
-                }
-                companies2[companyCount] = company;
-                companies = companies2;
-                companyCount++;
-            }
+        companies.add(company);
+        companyCount++;
     }
     
     /**
@@ -102,18 +90,18 @@ public class Market {
         beMeBreakPoints(period);
         sizeBreakPoints(period);      
         
-        for(int i = 0; i < companies.length; i++) {
-            int size = size(companies[i].marketValues[year]);
-            int beme = beMe(companies[i].beMeRatios[year]);
-            if(companies[i].marketValues[year] != 0) {
-                portfolios[size*BeMeCounts+beme].addCompany(companies[i]);
+        for(int i = 0; i < companies.size(); i++) {
+            int size = size(companies.get(i).marketValues[year]);
+            int beme = beMe(companies.get(i).beMeRatios[year]);
+            if(companies.get(i).marketValues[year] != 0) {
+                portfolios[size*BeMeCounts+beme].addCompany(companies.get(i));
             }    
         }
         for( int i = 0; i < portfolios.length; i++) {
             portfolios[i].portfolioMarketValue();
             portfolios[i].portfolioReturn();
-            portfolios[i].averagePortfolioReturn();
-            portfolios[i].averagePortfolioMarketValue();
+            portfolios[i].portfolioBeMe(); 
+            portfolios[i].calculateAverages();
         }
         addPortfolios(portfolios, period);
     }
@@ -146,7 +134,6 @@ public class Market {
      * @param year which years portfolios  are added to the array
      */
     public void addPortfolios(Portfolio[] port, int year) {
-        //years[year] = port;
         years[year]= port.clone();
     }
     
@@ -157,9 +144,9 @@ public class Market {
     public void beMeBreakPoints(int year) {
         int month = year*12+1;
         ArrayList<Double> bemeRatios = new ArrayList<Double>(1);
-        for (int i = 0; i < companies.length; i++) {
-            if(companies[i].beMeRatios[month] != 0) {
-               bemeRatios.add(companies[i].beMeRatios[month]);
+        for (int i = 0; i < companies.size(); i++) {
+            if(companies.get(i).beMeRatios[month] != 0) {
+               bemeRatios.add(companies.get(i).beMeRatios[month]);
             }
         }
         Collections.sort(bemeRatios);
@@ -177,9 +164,9 @@ public class Market {
     public void sizeBreakPoints(int year) {
         int month = year*12+1;
         ArrayList<Double> sizeRatios = new ArrayList<Double>();
-        for (int i = 0; i < companies.length; i++) {
-            if(companies[i].marketValues[month] != 0) {
-            sizeRatios.add(companies[i].marketValues[month]);
+        for (int i = 0; i < companies.size(); i++) {
+            if(companies.get(i).marketValues[month] != 0) {
+            sizeRatios.add(companies.get(i).marketValues[month]);
             }
         }
         Collections.sort(sizeRatios);
@@ -235,8 +222,8 @@ public class Market {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for(int i = 0; i < companies.length; i++) {
-            s.append(companies[i].name + " ");
+        for(int i = 0; i < companies.size(); i++) {
+            s.append(companies.get(i).name + " ");
         }
         return s.toString();
     }

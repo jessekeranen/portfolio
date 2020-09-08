@@ -16,6 +16,7 @@ public class Portfolio {
     /** Weighted monthly average portfolio return */
     public double[] portfolioReturns = new double[12];
     private double[] portfolioMarketValue = new double[12];
+    private double[] portfolioBeMe = new double[12];
     /** Mean of the portfolio returns */
     public double averagePortfolioReturn;
     /** String value of the mean of the portfolio returns */
@@ -24,7 +25,10 @@ public class Portfolio {
     public double averagePortfolioMarketValue;
     /** String value of the mean of the portfolio market values */
     public String averagePortfolioMarketValueString;
-    
+    /** Mean of the portfolio Be/Me values */
+    public double averagePortfolioBeMe;
+    /** String value of the Mean of the portfolio Be/Me values */
+    public String averagePortfolioBeMeString;
     /**
      * default constuctor
      * @param size indicates the size of the companies in the portfolio
@@ -53,45 +57,43 @@ public class Portfolio {
             }
         }
     }
-    
+     
     /**
      * Calculates the average portfolio return
      */
-    public void averagePortfolioReturn() {
+    public void calculateAverages() {
+        this.averagePortfolioReturn =  average(portfolioReturns);
+        this.averagePortfolioReturnString = averageString(averagePortfolioReturn);
+        this.averagePortfolioMarketValue = average(portfolioMarketValue);
+        this.averagePortfolioMarketValueString = averageString(averagePortfolioMarketValue);
+        this.averagePortfolioBeMe = average(portfolioBeMe);
+        this.averagePortfolioBeMeString = averageString(averagePortfolioBeMe);
+    }
+
+    
+    /**
+     * Calculates the mean of the given array return
+     * @param array array holding all the information
+     * @return average value
+     */
+    public double average(double[] array) {
         double average = 0;
-        for(int i = 0; i < portfolioReturns.length; i++) {
-            average += portfolioReturns[i];
+        for(int i = 0; i < array.length; i++) {
+            average += array[i];
         }
-        this.averagePortfolioReturn =  average/portfolioReturns.length;
-        averagePortfolioReturnString();
+        average =  average/array.length;
+        return average;
     }
     
     /**
      * Changes the average portfolio return from double to string
+     * @param average double value of the mean
+     * @return String value of the average
      */
-    public void averagePortfolioReturnString() {
-        String string = String.format("%.5f", averagePortfolioReturn);
-        this.averagePortfolioReturnString = String.valueOf(string);
+    public String averageString(double average) {
+        String string = String.format("%.5f", average);
+        return String.valueOf(string);
     }
-    
-    /**
-     * Calculates the average portfolio market value
-     */
-    public void averagePortfolioMarketValue() {
-        double average = 0;
-        for(int i = 0; i < portfolioMarketValue.length; i++) {
-            average += portfolioMarketValue[i];
-        }
-        this.averagePortfolioMarketValue =  average/portfolioMarketValue.length;
-        averagePortfolioMarketValueString();
-    }
-    
-    /**
-     * Changes the average portfolio market value from double to string
-     */
-    public void averagePortfolioMarketValueString() {
-        String string = String.format("%.2f", averagePortfolioMarketValue);
-        this.averagePortfolioMarketValueString = String.valueOf(string);    }
     
     /**
      * calculates total market value of the portfolio
@@ -102,6 +104,20 @@ public class Portfolio {
                 int month = i+11;
             portfolioMarketValue[i] += companies.get(j).marketValues[month];
             }
+            portfolioMarketValue[i] = portfolioMarketValue[i]/companies.size();
+        }
+    }
+    
+    /**
+     * Calculates Be/Me values for portfolio for each month
+     */
+    public void portfolioBeMe() {
+        for(int i = 0; i < 12; i++) {
+            for(int j = 0; j < companies.size(); j++) {
+                int month = i+11;
+            portfolioBeMe[i] += companies.get(j).beMeRatios[month];
+            }
+            portfolioBeMe[i] = portfolioBeMe[i]/companies.size();
         }
     }
     
@@ -137,7 +153,7 @@ public class Portfolio {
     }
     
     /**
-     * @param args ei käytössä
+     * @param args not used
      */
     public static void main(String[] args) {
         //

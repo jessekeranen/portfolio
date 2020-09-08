@@ -148,7 +148,7 @@
          <children>
             <HBox>
                <children>
-                  <Button mnemonicParsing="false" text="Button">
+                  <Button fx:id="Print" mnemonicParsing="false" onAction="#printPotfolioReturns" text="Print">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
@@ -157,7 +157,7 @@
             </HBox>
             <HBox>
                <children>
-                  <Button mnemonicParsing="false" text="Button">
+                  <Button fx:id="exit" mnemonicParsing="false" onAction="#exit" text="Exit">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
