@@ -101,8 +101,10 @@ public class MainPageGUIController {
         try(XSSFWorkbook workbook = new XSSFWorkbook();) 
         {
             XSSFSheet sheet = workbook.createSheet("Portfolio returns");
+            XSSFSheet sheet2 = workbook.createSheet("Portfolio names");
         
             putData(sheet);
+            putNames(sheet2);
             //Write the workbook in file system
             @SuppressWarnings("resource")
             FileOutputStream out = new FileOutputStream(new File("/Users/jessekeranen/Projects/Työkirja10.xlsx"));
@@ -260,6 +262,28 @@ public class MainPageGUIController {
                 returns[k] = Double.toString(market.periodPortfolioRetruns[k][j]);
             }
         data.put(Integer.toString(j+2), returns);
+        }
+    }
+    
+    private void putNames(XSSFSheet sheet) {
+        
+        Row[] rows = new Row[market.companies.size()];
+        for(int i = 0; i < rows.length; i++) {
+            rows[i] = sheet.createRow(i);
+        }       
+        
+        for(int i = 0; i < market.years.length; i++) {
+            int cellnum = i;
+            int rownum = 1;
+            rows[rownum-1].createCell(cellnum).setCellValue("Year " + i);
+            for(int j = 0; j < market.years[0].length; j++) {  
+                rows[rownum++].createCell(cellnum).setCellValue("");
+                rows[rownum++].createCell(cellnum).setCellValue(market.years[0][j].name);
+                for(int k = 0; k < market.years[i][j].companies.size(); k++) {  
+                    rows[rownum].createCell(cellnum).setCellValue(market.years[i][j].companies.get(k).name);
+                    rownum++;
+                }
+            }
         }
     }
 }
