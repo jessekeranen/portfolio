@@ -72,9 +72,9 @@ public class Company {
                     name = cell.toString();
                 }
                 
-            }  
-            dividends = dividends(sheet4, number);
+            } 
             returns = returns();
+            dividends = dividends(sheet4, number);
             marketValues = marketValues(sheet3, number);
             bookValues = bookValues(sheet2, number);  
             beMeRatios = beMeRatio();
@@ -127,11 +127,13 @@ public class Company {
         int lastChange = 0;
         for(int i = 1; i < prices.length; i++) {
             if(array[i] != array[i-1]) {
-                //prices[i] += array[i];
+                //double dreturn = array[i]/prices[i];
+                //returns[i] += dreturn; 
                 lastChange = 0;
             }
             else if(lastChange == 12){
-                //prices[i] += array[i];
+                //double dreturn = array[i]/prices[i];
+                //returns[i] += dreturn;
                 lastChange = 0;
             }
             else {

@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -100,11 +102,14 @@ public class MainPageGUIController {
     private void printPotfolioReturns() { 
         try(XSSFWorkbook workbook = new XSSFWorkbook();) 
         {
+            XSSFCellStyle cellStyle = workbook.createCellStyle();
+            XSSFCellStyle cellStyle2 = workbook.createCellStyle();
+            
             XSSFSheet sheet = workbook.createSheet("Portfolio returns");
             XSSFSheet sheet2 = workbook.createSheet("Portfolio names");
         
             putData(sheet);
-            putNames(sheet2);
+            putNames(sheet2, cellStyle, cellStyle2);
             //Write the workbook in file system
             @SuppressWarnings("resource")
             FileOutputStream out = new FileOutputStream(new File("/Users/jessekeranen/Projects/Työkirja10.xlsx"));
@@ -265,7 +270,11 @@ public class MainPageGUIController {
         }
     }
     
-    private void putNames(XSSFSheet sheet) {
+    private void putNames(XSSFSheet sheet, XSSFCellStyle cellStyle, XSSFCellStyle cellStyle2) {
+        
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        cellStyle2.setBorderBottom(BorderStyle.THIN);
+        cellStyle2.setBorderRight(BorderStyle.THIN);
         
         Row[] rows = new Row[market.companies.size()];
         for(int i = 0; i < rows.length; i++) {
@@ -275,12 +284,22 @@ public class MainPageGUIController {
         for(int i = 0; i < market.years.length; i++) {
             int cellnum = i;
             int rownum = 1;
-            rows[rownum-1].createCell(cellnum).setCellValue("Year " + i);
+            
+            Cell cell = rows[rownum-1].createCell(cellnum);
+            cell.setCellValue("Year " + i);
+            cell.setCellStyle(cellStyle2);
+            
             for(int j = 0; j < market.years[0].length; j++) {  
-                rows[rownum++].createCell(cellnum).setCellValue("");
-                rows[rownum++].createCell(cellnum).setCellValue(market.years[0][j].name);
+                cell = rows[rownum++].createCell(cellnum);
+                cell.setCellValue("");  
+                cell.setCellStyle(cellStyle);
+                cell = rows[rownum++].createCell(cellnum);
+                cell.setCellValue(market.years[0][j].name);
+                cell.setCellStyle(cellStyle2);
                 for(int k = 0; k < market.years[i][j].companies.size(); k++) {  
-                    rows[rownum].createCell(cellnum).setCellValue(market.years[i][j].companies.get(k).name);
+                    cell = rows[rownum].createCell(cellnum);
+                    cell.setCellStyle(cellStyle);
+                    cell.setCellValue(market.years[i][j].companies.get(k).name);
                     rownum++;
                 }
             }
