@@ -10,27 +10,23 @@ import java.util.Collections;
  */
 public class Market {
     
-    /** Number of companies */
-    public int companyCount;
-    /** Number of portfolios */
-    public int portfolioCount = 0;
-    /** Maximum number of the portfolios */
-    public int portfolioMaxCount;
+    Portfolios portfolios = new Portfolios();
+
     /** Array of companies */
     public ArrayList<Company> companies = new ArrayList<Company>();
-    /** Array of portfolios */
-    public Portfolio[] portfolios;
     private double[] beMeBreakPoints;
     private double[] sizeBreakPoints;
+    public int portfolioMaxCount;
     /** Two dimensional array of the portfolio for each year */
     public Portfolio[][] years;
-    private int yearCount;
     /** From how many months does the data consist */
     public int months;
     /** Two dimensional array of the portfolio retruns for whole period for each portfolio */
-    public double[][] periodPortfolioRetruns;
-    private int MarketValueCounts;
-    private int BeMeCounts;        
+    public double[][] periodPortfolioRetruns;      
+    private Portfolio[] factorPortfolios = new Portfolio[6];
+    private int factorPortfolioMaxCount = 6;
+    /** Array of factors */
+    public Factor[] factors = new Factor[2]; 
     
     /**
      * Constructor
@@ -39,13 +35,9 @@ public class Market {
      * @param months number of months
      */
     public Market(int MarketValueCounts, int BeMeCounts, int months) {
-        this.MarketValueCounts = MarketValueCounts;
-        this.BeMeCounts = BeMeCounts;
         this.portfolioMaxCount = (MarketValueCounts*BeMeCounts);
-        this.portfolios = new Portfolio[portfolioMaxCount];
-        this.yearCount =  months/12;
         this.months = months;
-        this.years = new Portfolio[yearCount][portfolioCount];
+        this.years = new Portfolio[months/12][portfolioMaxCount];
         this.periodPortfolioRetruns = new double[portfolioMaxCount][months];
         this.beMeBreakPoints = new double[BeMeCounts-1];
         this.sizeBreakPoints = new double[MarketValueCounts-1];
@@ -56,76 +48,21 @@ public class Market {
      */
     public void addCompany(Company company) {
         companies.add(company);
-        companyCount++;
-    }
-    
-    /**
-     * @param portfolio that is constructed from stocks on market
-     */
-    public void addPortfolio(Portfolio portfolio) {
-        portfolios[portfolioCount] = portfolio;
-        portfolioCount++;
-        if(portfolioCount == portfolioMaxCount) portfolioCount = 0;
-    }
-    
-    /**
-     * Constructs amount of portfolios depending on user input in portfolio constructor 
-     */
-    public void adjustPortfolios() {
-        for(int size = 1; size < MarketValueCounts+1; size++) {
-            for(int value = 1; value < BeMeCounts+1; value++) {
-                Portfolio portfolio = new Portfolio(size, value);
-                addPortfolio(portfolio);
-            }
-        }
-    }
+    }     
     
     /**
      * Adds companies to the portfolio depending on their market and book values
      * @param period which year
+     * @param mvCount Number of market value breakpoints
+     * @param bmCount Number of Be/Me breakpoints
+     * @param number Number that indicates are we constructing portfolios (0) or factors (1)
      */
-    public void constructPortfolios(int period) {
-        int year = period*12+1;
-        adjustPortfolios();
-        beMeBreakPoints(period);
-        sizeBreakPoints(period);      
+    public void constructPortfolios(int period, int mvCount, int bmCount, int number) {
+        beMeBreakPoints = breakPoints(period, bmCount, 0);
+        sizeBreakPoints = breakPoints(period, mvCount, 1); 
         
-        for(int i = 0; i < companies.size(); i++) {
-            int size = size(companies.get(i).marketValues[year]);
-            int beme = beMe(companies.get(i).beMeRatios[year]);
-            if(companies.get(i).marketValues[year] != 0) {
-                portfolios[size*BeMeCounts+beme].addCompany(companies.get(i));
-            }    
-        }
-        for( int i = 0; i < portfolios.length; i++) {
-            portfolios[i].portfolioMarketValue();
-            portfolios[i].portfolioReturn();
-            portfolios[i].portfolioBeMe(); 
-            portfolios[i].calculateAverages();
-        }
-        addPortfolios(portfolios, period);
-    }
-    
-    /**
-     * @param size companys market value
-     * @return number that indicates in which size group company belongs
-     */
-    public int size(double size) {
-        for(int k = 0; k < sizeBreakPoints.length; k++) {
-            if(size < sizeBreakPoints[k]) return k;  
-        }
-        return sizeBreakPoints.length;
-    }
-    
-    /**
-     * @param beme companys be/me-ratio
-     * @return number that indicates in which beme group company belongs
-     */
-    public int beMe(double beme) {
-        for(int j = 0; j < beMeBreakPoints.length; j++) {
-            if(beme < beMeBreakPoints[j]) return j;
-        }
-        return beMeBreakPoints.length;
+       Portfolio[] portfolios2 = portfolios.constructPortfolios(period, mvCount, bmCount, number, companies, sizeBreakPoints, beMeBreakPoints);
+       addPortfolios(portfolios2, period);
     }
     
     /**
@@ -138,43 +75,57 @@ public class Market {
     }
     
     /**
-     * calculates be/me-break points from market data
+     * calculates breakpoints from market data
      * @param year whitch months break points
+     * @param count number of breakpoints 
+     * @param number indicates which variable is handled
+     * @return Array of breakpoints
      */
-    public void beMeBreakPoints(int year) {
+    public double[] breakPoints(int year, int count, int number) {
+        double[] array = new double[count-1];
         int month = year*12+1;
-        ArrayList<Double> bemeRatios = new ArrayList<Double>(1);
-        for (int i = 0; i < companies.size(); i++) {
-            if(companies.get(i).beMeRatios[month] != 0) {
-               bemeRatios.add(companies.get(i).beMeRatios[month]);
-            }
+        ArrayList<Double> ratios = new ArrayList<Double>();
+        if(number == 0) {
+            ratios = bemeRatios(month);
         }
-        Collections.sort(bemeRatios);
-        int amount = bemeRatios.size()/BeMeCounts;
-        for(int j = 0; j < BeMeCounts-1; j++) {
-            beMeBreakPoints[j] = bemeRatios.get(amount);
-            amount += bemeRatios.size()/BeMeCounts;
+        else if(number == 1) {
+            ratios = sizes(month);
         }
+        Collections.sort(ratios);
+        int amount = ratios.size()/count;
+        for(int j = 0; j < count-1; j++) {
+            array[j] = ratios.get(amount);
+            amount += ratios.size()/count;
+        }
+        return array;
     }
     
     /**
-     * calculates be/me-break points from market data
-     * @param year whitch months break points
+     * @param month Which month
+     * @return Returns an array of the companies Be/Me ratios
      */
-    public void sizeBreakPoints(int year) {
-        int month = year*12+1;
+    public ArrayList<Double> bemeRatios(int month) {
+        ArrayList<Double> ratios = new ArrayList<Double>(1);
+        for (int i = 0; i < companies.size(); i++) {
+            if(companies.get(i).beMeRatios[month] != 0) {
+               ratios.add(companies.get(i).beMeRatios[month]);
+            }
+        }
+        return ratios;
+    }  
+    
+    /**
+     * @param month which month
+     * @return Returns an array of the market values of the companies
+     */
+    public ArrayList<Double> sizes(int month){
         ArrayList<Double> sizeRatios = new ArrayList<Double>();
         for (int i = 0; i < companies.size(); i++) {
             if(companies.get(i).marketValues[month] != 0) {
             sizeRatios.add(companies.get(i).marketValues[month]);
             }
         }
-        Collections.sort(sizeRatios);
-        int amount = sizeRatios.size()/MarketValueCounts;
-        for(int j = 0; j < MarketValueCounts-1; j++) {
-            sizeBreakPoints[j] = sizeRatios.get(amount);
-            amount += sizeRatios.size()/MarketValueCounts;
-        }
+        return sizeRatios;
     }
     
     /**
@@ -183,7 +134,7 @@ public class Market {
     public void periodPortfolioReturns() { 
         for(int j = 0; j < portfolioMaxCount; j++) {
             int beginning = 0; 
-            for(int i = 0; i < yearCount; i++) {
+            for(int i = 0; i < months/12; i++) {
                 System.arraycopy(years[i][j].portfolioReturns, 0, periodPortfolioRetruns[j], beginning, years[i][j].portfolioReturns.length);
                 beginning += years[i][j].portfolioReturns.length;
             }
@@ -217,6 +168,28 @@ public class Market {
         }
         average = average/periodPortfolioRetruns[number].length;
         return String.format("%.5f", average);
+    }
+    
+    /**
+     * Construct factors
+     */
+    public void constructFactors() {
+        for(int i = 0; i < Company.years; i++) {
+            constructPortfolios(i,3,2,1);
+        }
+        for(int j = 0; j < factorPortfolios.length; j++) {
+            factorPortfolios[j].portfolioMarketValue();
+            factorPortfolios[j].portfolioReturn();
+        }
+        factors[0] = new Factor("SMB", 2, factorPortfolios);
+        
+        for(int i = 0; i < Company.years; i++) {
+            constructPortfolios(i,2,1,1);
+        }
+        for(int j = 0; j < factorPortfolios.length; j++) {
+            factorPortfolios[j].portfolioReturn();
+        }
+        factors[1] = new Factor("HML", 1, factorPortfolios);
     }
     
     @Override

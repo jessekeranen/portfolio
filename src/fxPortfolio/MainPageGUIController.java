@@ -107,9 +107,11 @@ public class MainPageGUIController {
             
             XSSFSheet sheet = workbook.createSheet("Portfolio returns");
             XSSFSheet sheet2 = workbook.createSheet("Portfolio names");
+            XSSFSheet sheet3 = workbook.createSheet("Factors");
         
             putData(sheet);
             putNames(sheet2, cellStyle, cellStyle2);
+            putFactors(sheet3);
             //Write the workbook in file system
             @SuppressWarnings("resource")
             FileOutputStream out = new FileOutputStream(new File("/Users/jessekeranen/Projects/Työkirja10.xlsx"));
@@ -122,6 +124,11 @@ public class MainPageGUIController {
         }
     }
     
+    @FXML
+    private void constructFarctors() {
+        market.constructFactors();
+    }
+    
     
 
     private Market market;
@@ -131,13 +138,15 @@ public class MainPageGUIController {
     
     /**
      * @param market market that contains all the companies of the data
+     * @param mvCount number of market value breakpoints
+     * @param bmCount number of Be/Me breakpoints
      */
-    public void setMarket(Market market) {
+    public void setMarket(Market market, int mvCount, int bmCount) {
         this.market = market;
         //chooserPortfolios.addSelectionListener(e-> showPortfolio(market));
         
         for(int i = 0; i < Company.years; i++) {
-            market.constructPortfolios(i);
+            market.constructPortfolios(i, mvCount, bmCount, 0);
         }
         
         comboBox.clear();
@@ -255,7 +264,7 @@ public class MainPageGUIController {
     private void putData(Map<String, Object[]> data) {
         Object[] names = new Object[market.periodPortfolioRetruns.length];
         for(int i = 0; i < market.periodPortfolioRetruns.length; i++) {
-            names[i] = market.portfolios[i].name;
+            names[i] = market.years[0][i].name;
         }
         data.put("1", names);
         
@@ -302,6 +311,27 @@ public class MainPageGUIController {
                     cell.setCellValue(market.years[i][j].companies.get(k).name);
                     rownum++;
                 }
+            }
+        }
+    }
+    
+    private void putFactors(XSSFSheet sheet) {
+        
+        Row[] rows = new Row[market.companies.size()];
+        for(int i = 0; i < rows.length; i++) {
+            rows[i] = sheet.createRow(i);
+        } 
+        
+        market.constructFactors();
+        
+        for(int i = 0; i < market.factors.length; i++) {
+            int cellnum = i;
+            int rownum = 1;
+            
+            Cell cell = rows[rownum-1].createCell(cellnum);
+            cell.setCellValue("Year " + i);
+            for(int j = 0; j < market.factors[i].premiums.length; j++) {
+                cell.setCellValue(market.factors[i].premiums[j]);
             }
         }
     }

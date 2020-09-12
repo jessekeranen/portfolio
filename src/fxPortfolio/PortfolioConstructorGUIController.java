@@ -98,7 +98,7 @@ public class PortfolioConstructorGUIController {
         catch(Exception e)  {  
             e.printStackTrace();  
         }
-        marketCtrl.setMarket(market);
+        marketCtrl.setMarket(market, MarketValueCount, BeMeCounts);
     }
 }
 
