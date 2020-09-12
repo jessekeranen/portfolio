@@ -13,7 +13,7 @@ public class Portfolios {
     public int portfolioCount = 0;
     /** Maximum number of the portfolios */
     public int portfolioMaxCount;
-    /** Array of portfolios */
+    /** Array of portfolios on ceratin year */
     public Portfolio[] portfolios;
     private Portfolio[] factorPortfolios = new Portfolio[6];
     private int factorPortfolioCount;
@@ -101,7 +101,11 @@ public class Portfolios {
             }
             return portfolios;
         }
-        return factorPortfolios;    
+        for(int j = 0; j < factorPortfolios.length; j++) {
+            factorPortfolios[j].portfolioMarketValue();
+            factorPortfolios[j].portfolioReturn();
+        }
+        return factorPortfolios;   
     }
     
     /**

@@ -6,7 +6,7 @@ import java.util.Collections;
 /**
  * @author jessekeranen
  * @version 22.7.2020
- *
+ * Class that contains information about all the companies. Contains also information about different breakpoints and two dimensional array that contains all the portfolios for all the years
  */
 public class Market {
     
@@ -16,6 +16,7 @@ public class Market {
     public ArrayList<Company> companies = new ArrayList<Company>();
     private double[] beMeBreakPoints;
     private double[] sizeBreakPoints;
+    /** Maximum amount of portfolios for each year */
     public int portfolioMaxCount;
     /** Two dimensional array of the portfolio for each year */
     public Portfolio[][] years;
@@ -27,6 +28,10 @@ public class Market {
     private int factorPortfolioMaxCount = 6;
     /** Array of factors */
     public Factor[] factors = new Factor[2]; 
+    public Portfolio[][] factorYears;
+    //public Portfolio[][][] factorYears2;
+    /** Two dimensional array of the factor portfolio retruns for whole period for each factor portfolio */
+    public double[][] periodFactorPortfolioRetruns;
     
     /**
      * Constructor
@@ -41,6 +46,8 @@ public class Market {
         this.periodPortfolioRetruns = new double[portfolioMaxCount][months];
         this.beMeBreakPoints = new double[BeMeCounts-1];
         this.sizeBreakPoints = new double[MarketValueCounts-1];
+        this.factorYears = new Portfolio[months/12][6];
+        this.periodFactorPortfolioRetruns = new double[2][months];
     }
     
     /**
@@ -71,7 +78,10 @@ public class Market {
      * @param year which years portfolios  are added to the array
      */
     public void addPortfolios(Portfolio[] port, int year) {
-        years[year]= port.clone();
+        if(port.equals(portfolios.portfolios)) {
+                    years[year] = port.clone();
+        }
+        else factorYears[year] = port.clone();
     }
     
     /**
@@ -130,13 +140,21 @@ public class Market {
     
     /**
      * Calculates portfolio returns for each portfoio for whole period. 
+     * @param factor Are we dealing with factor portfolios or regular portfolios
      */
-    public void periodPortfolioReturns() { 
-        for(int j = 0; j < portfolioMaxCount; j++) {
-            int beginning = 0; 
-            for(int i = 0; i < months/12; i++) {
-                System.arraycopy(years[i][j].portfolioReturns, 0, periodPortfolioRetruns[j], beginning, years[i][j].portfolioReturns.length);
-                beginning += years[i][j].portfolioReturns.length;
+    public void periodPortfolioReturns(boolean factor) { 
+        if(factor == false) {
+            for(int j = 0; j < portfolioMaxCount; j++) {
+                int beginning = 0; 
+                for(int i = 0; i < months/12; i++) {
+                    System.arraycopy(years[i][j].portfolioReturns, 0, periodPortfolioRetruns[j], beginning, years[i][j].portfolioReturns.length);
+                    beginning += years[i][j].portfolioReturns.length;
+                }
+            }
+        }
+        else {
+            for(int j = 0; j < factors.length; j++) {
+                    System.arraycopy(factors[j].premiums, 0, periodFactorPortfolioRetruns[j], 0, factors[j].premiums.length);
             }
         }
     }
@@ -161,7 +179,7 @@ public class Market {
      * @return average book value
      */
     public String periodAverageReturn(int number) {
-        periodPortfolioReturns();
+        periodPortfolioReturns(false);
         double average = 0;
         for(int i = 0; i < periodPortfolioRetruns[number].length; i++) {
             average += periodPortfolioRetruns[number][i];
@@ -177,19 +195,24 @@ public class Market {
         for(int i = 0; i < Company.years; i++) {
             constructPortfolios(i,3,2,1);
         }
-        for(int j = 0; j < factorPortfolios.length; j++) {
-            factorPortfolios[j].portfolioMarketValue();
-            factorPortfolios[j].portfolioReturn();
+        for(int i = 0; i < factorYears.length; i++) {
+            for(int j = 0; j < factorYears[0].length; j++) {
+                factorYears[i][j].portfolioMarketValue();
+                factorYears[i][j].portfolioReturn();
+            }
         }
-        factors[0] = new Factor("SMB", 2, factorPortfolios);
+        factors[0] = new Factor("SMB", 2, factorYears);
         
         for(int i = 0; i < Company.years; i++) {
-            constructPortfolios(i,2,1,1);
+            constructPortfolios(i,3,2,1);
         }
-        for(int j = 0; j < factorPortfolios.length; j++) {
-            factorPortfolios[j].portfolioReturn();
+        for(int i = 0; i < factorYears.length; i++) {
+            for(int j = 0; j < factorYears[0].length; j++) {
+                factorYears[i][j].portfolioMarketValue();
+                factorYears[i][j].portfolioReturn();
+            }
         }
-        factors[1] = new Factor("HML", 1, factorPortfolios);
+        factors[1] = new Factor("HML", 1, factorYears); 
     }
     
     @Override
