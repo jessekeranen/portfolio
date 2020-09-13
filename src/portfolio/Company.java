@@ -8,7 +8,68 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 /**
  * @author jessekeranen
  * @version 22.7.2020
- *
+ * 
+ * @example
+ * <pre name="testJAVA">
+ * #import java.util.Arrays;
+ * #TOLERANCE=0.01
+ * #import  java.io.*;
+ * #import  org.apache.poi.xssf.usermodel.XSSFSheet;
+ * #import  org.apache.poi.xssf.usermodel.XSSFWorkbook;
+ * #import  org.apache.poi.xssf.usermodel.XSSFRow;
+ * #import portfolio.Company;
+ * 
+ * private Company Nokia; 
+ * 
+ * 
+ * public void exampleCompany() {
+ * String filename = "/Users/jessekeranen/CompanyTest.xlsx" ;
+ * XSSFWorkbook workbook = new XSSFWorkbook();
+ * XSSFSheet sheet = workbook.createSheet("Prices");
+ * XSSFSheet sheet2 = workbook.createSheet("MarketValues");
+ * XSSFSheet sheet3 = workbook.createSheet("BookValues");
+ * XSSFSheet sheet4 = workbook.createSheet("Dividends"); 
+ * 
+ * XSSFRow row = sheet.createRow(0);
+ * row.createCell(0).setCellValue("Nokia");
+ * for(int i = 1; i < 13; i++){
+ *      row = sheet.createRow(i);
+ *      row.createCell(0).setCellValue(i*11.05+i-i*i);
+ * }
+ *      
+ * XSSFRow row2 = sheet2.createRow(0);
+ * row2.createCell(0).setCellValue("Nokia");
+ * for(int i = 1; i < 13; i++){
+ *      row2 = sheet2.createRow(i);
+ *      row2.createCell(0).setCellValue(1*11.05-i*i);
+ * }
+ * 
+ * XSSFRow row3 = sheet3.createRow(0);
+ * row3.createCell(0).setCellValue("Nokia");
+ * for(int i = 1; i < 13; i++){
+ *      row3 = sheet3.createRow(i);
+ *      row3.createCell(0).setCellValue(1*11.05-i*i);
+ * }
+ * 
+ * XSSFRow row4 = sheet4.createRow(0);
+ * row4.createCell(0).setCellValue("Nokia");
+ * for(int i = 1; i < 13; i++){
+ *      row4 = sheet4.createRow(i);
+ *      row4.createCell(0).setCellValue(1*11.05-i*i);
+ * }
+ *  
+ *  try{
+ *  FileOutputStream fileOut = new FileOutputStream(filename);
+ *  workbook.write(fileOut);
+ *  fileOut.close();
+ *  workbook.close(); 
+ *  }catch( Exception e) {
+ *       System.err.println(e.getMessage());
+ *  }
+ *  
+ * Nokia = new Company(sheet, sheet2, sheet3, sheet4, 0);
+ * }
+ * </pre>
  */
 public class Company {
     
@@ -21,7 +82,7 @@ public class Company {
     protected double[] marketValues;
     private double[] bookValues;
     /** Array of the monthly returns of the company */
-    protected double[] returns;
+    public double[] returns;
     /** Array of the Be/Mr-ratios of the company */
     protected double[] beMeRatios;
     /** Number of the rows in data sheet */
@@ -88,11 +149,29 @@ public class Company {
     /**
      * calculates monthly returns from prices of the stock
      * @return array of the monthly returns
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     * #import java.text.DecimalFormat;
+     * #import java.text.DecimalFormatSymbols;
+     * #import java.util.Locale;
+     * 
+     * exampleCompany();
+     * Nokia.name === "Nokia";
+     * Nokia.returns.length === 12;
+     * double[] array = Nokia.returns;
+     * DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+     * DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
+     * for (int i = 0; i < array.length; i++) {
+     *      array[i] = Double.valueOf(decimalFormat.format(array[i]));
+     * } 
+     * Arrays.toString(array) === "[0.0, 0.82, 0.35, 0.19, 0.09, 0.03, -0.03, -0.08, -0.15, -0.25, -0.44, -0.95]";
+     * </pre>
      */
     public double[] returns() {
-        double[] returns1 = new double[prices.length-1];
-        for(int i = 0; i < prices.length-1; i++) {
-            returns1[i] = (prices[i+1]-prices[i])/prices[i]; 
+        double[] returns1 = new double[prices.length];
+        for(int i = 1; i < prices.length; i++) {
+            returns1[i] = (prices[i]-prices[i-1])/prices[i-1]; 
         }
         return returns1;
     }

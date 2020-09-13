@@ -25,7 +25,6 @@ public class Market {
     /** Two dimensional array of the portfolio retruns for whole period for each portfolio */
     public double[][] periodPortfolioRetruns;      
     private Portfolio[] factorPortfolios = new Portfolio[6];
-    private int factorPortfolioMaxCount = 6;
     /** Array of factors */
     public Factor[] factors = new Factor[2]; 
     public Portfolio[][] factorYears;
@@ -51,6 +50,7 @@ public class Market {
     }
     
     /**
+     * Adds a company to the companies array
      * @param company company that is added to the market portfolio
      */
     public void addCompany(Company company) {
@@ -85,10 +85,10 @@ public class Market {
     }
     
     /**
-     * calculates breakpoints from market data
-     * @param year whitch months break points
+     * Calculates breakpoints from market data for certain year. Can be used to calculate size and Be/Me breakpoints
+     * @param year whitch years breakpoints
      * @param count number of breakpoints 
-     * @param number indicates which variable is handled
+     * @param number indicates which variable is handled. Be/Me or size.
      * @return Array of breakpoints
      */
     public double[] breakPoints(int year, int count, int number) {
@@ -111,6 +111,7 @@ public class Market {
     }
     
     /**
+     * Returns an array that contains Be/Me ratios of each company which belong to the portfolio
      * @param month Which month
      * @return Returns an array of the companies Be/Me ratios
      */
@@ -125,6 +126,7 @@ public class Market {
     }  
     
     /**
+     * Returns an array that contains market values of each company which belong to the portfolio
      * @param month which month
      * @return Returns an array of the market values of the companies
      */
@@ -189,7 +191,9 @@ public class Market {
     }
     
     /**
-     * Construct factors
+     * Constructs portfolios in the spirit of Fama & French. Then calculates premium between small and large 
+     * portfolios as well as between high value and low value portfolios. Then adds these constructed factors
+     * to the factors array
      */
     public void constructFactors() {
         for(int i = 0; i < Company.years; i++) {
