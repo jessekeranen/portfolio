@@ -41,14 +41,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
  * row2.createCell(0).setCellValue("Nokia");
  * for(int i = 1; i < 13; i++){
  *      row2 = sheet2.createRow(i);
- *      row2.createCell(0).setCellValue(1*11.05-i*i);
+ *      row2.createCell(0).setCellValue(i*1100.05+i-i*i);
  * }
  * 
  * XSSFRow row3 = sheet3.createRow(0);
  * row3.createCell(0).setCellValue("Nokia");
  * for(int i = 1; i < 13; i++){
  *      row3 = sheet3.createRow(i);
- *      row3.createCell(0).setCellValue(1*11.05-i*i);
+ *      row3.createCell(0).setCellValue(i*700.05+1000-i*i);
  * }
  * 
  * XSSFRow row4 = sheet4.createRow(0);
@@ -67,7 +67,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
  *       System.err.println(e.getMessage());
  *  }
  *  
- * Nokia = new Company(sheet, sheet2, sheet3, sheet4, 0);
+ * Nokia = new Company(sheet, sheet3, sheet2, sheet4, 0);
  * }
  * </pre>
  */
@@ -84,7 +84,7 @@ public class Company {
     /** Array of the monthly returns of the company */
     public double[] returns;
     /** Array of the Be/Mr-ratios of the company */
-    protected double[] beMeRatios;
+    public double[] beMeRatios;
     /** Number of the rows in data sheet */
     public static int rows;
     @SuppressWarnings("unused")
@@ -179,10 +179,28 @@ public class Company {
     /**
      * calculates monthly be/me-ratios of the company
      * @return monthly be/me-ratios of the company
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     * #import java.text.DecimalFormat;
+     * #import java.text.DecimalFormatSymbols;
+     * #import java.util.Locale;
+     * 
+     * exampleCompany();
+     * Nokia.name === "Nokia";
+     * Nokia.returns.length === 12;
+     * double[] array = Nokia.beMeRatios;
+     * DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+     * DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
+     * for (int i = 0; i < array.length; i++) {
+     *      array[i] = Double.valueOf(decimalFormat.format(array[i]));
+     * } 
+     * Arrays.toString(array) === "[1.54, 1.09, 0.94, 0.86, 0.82, 0.79, 0.76, 0.75, 0.73, 0.72, 0.72, 0.71]";
+     * </pre>
      */
     public double[] beMeRatio() {
         double[] bemeRatios = new double[marketValues.length];
-        for (int i = 0; i < marketValues.length-1; i++) {
+        for (int i = 0; i < marketValues.length; i++) {
             if(marketValues[i] != 0) {
             bemeRatios[i] =  bookValues[i]/marketValues[i];
             }
@@ -254,17 +272,17 @@ public class Company {
         XSSFCell cell;
         
         int rowIndex = 0;
-        double[] array = new double[sheet.getPhysicalNumberOfRows()-1];
+        double[] array = new double[rows-1];
         int columnIndex = number;
-        for (rowIndex = 0; rowIndex<sheet.getPhysicalNumberOfRows()-1; rowIndex++){
+        for (rowIndex = 0; rowIndex<rows; rowIndex++){
             cell = sheet.getRow(rowIndex).getCell(columnIndex);
             if(cell.getCellTypeEnum() == CellType.NUMERIC) {
-                array[rowIndex] = cell.getNumericCellValue();
+                array[rowIndex-1] = cell.getNumericCellValue();
                 }
             else if(cell.toString().equals("NA")) {
-                array[rowIndex] = 0;
+                array[rowIndex-1] = 0;
                     if(marketValues != null) {
-                        marketValues[rowIndex] = 0;
+                        marketValues[rowIndex-1] = 0;
                     }   
                 }
             }

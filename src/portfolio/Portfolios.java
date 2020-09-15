@@ -94,16 +94,16 @@ public class Portfolios {
         }
         if(number == 0) {
             for( int i = 0; i < portfolios.length; i++) {
-                portfolios[i].portfolioMarketValue();
-                portfolios[i].portfolioReturn();
-                portfolios[i].portfolioBeMe(); 
+                portfolios[i].portfolioMarketValue(period);
+                portfolios[i].portfolioReturn(period);
+                portfolios[i].portfolioBeMe(period); 
                 portfolios[i].calculateAverages();
             }
             return portfolios;
         }
         for(int j = 0; j < factorPortfolios.length; j++) {
-            factorPortfolios[j].portfolioMarketValue();
-            factorPortfolios[j].portfolioReturn();
+            factorPortfolios[j].portfolioMarketValue(period);
+            factorPortfolios[j].portfolioReturn(period);
         }
         return factorPortfolios;   
     }

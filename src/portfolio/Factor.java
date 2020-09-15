@@ -27,6 +27,7 @@ public class Factor {
     }
     
     /**
+     * Calculates the premiums small and large market value portfolios and high and low value portfolios
      * @param bemeBreakPoints Number of Be/Me breakpoints
      */
     public void premiums(int bemeBreakPoints){

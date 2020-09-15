@@ -12,7 +12,7 @@ public class Market {
     
     Portfolios portfolios = new Portfolios();
 
-    /** Array of companies */
+    /** An array of companies */
     public ArrayList<Company> companies = new ArrayList<Company>();
     private double[] beMeBreakPoints;
     private double[] sizeBreakPoints;
@@ -24,11 +24,10 @@ public class Market {
     public int months;
     /** Two dimensional array of the portfolio retruns for whole period for each portfolio */
     public double[][] periodPortfolioRetruns;      
-    private Portfolio[] factorPortfolios = new Portfolio[6];
-    /** Array of factors */
+    /** An array of factors */
     public Factor[] factors = new Factor[2]; 
+    /** An array of factor portfolios for each year */
     public Portfolio[][] factorYears;
-    //public Portfolio[][][] factorYears2;
     /** Two dimensional array of the factor portfolio retruns for whole period for each factor portfolio */
     public double[][] periodFactorPortfolioRetruns;
     
@@ -201,8 +200,8 @@ public class Market {
         }
         for(int i = 0; i < factorYears.length; i++) {
             for(int j = 0; j < factorYears[0].length; j++) {
-                factorYears[i][j].portfolioMarketValue();
-                factorYears[i][j].portfolioReturn();
+                factorYears[i][j].portfolioMarketValue(i);
+                factorYears[i][j].portfolioReturn(i);
             }
         }
         factors[0] = new Factor("SMB", 2, factorYears);
@@ -212,8 +211,8 @@ public class Market {
         }
         for(int i = 0; i < factorYears.length; i++) {
             for(int j = 0; j < factorYears[0].length; j++) {
-                factorYears[i][j].portfolioMarketValue();
-                factorYears[i][j].portfolioReturn();
+                factorYears[i][j].portfolioMarketValue(i);
+                factorYears[i][j].portfolioReturn(i);
             }
         }
         factors[1] = new Factor("HML", 1, factorYears); 
