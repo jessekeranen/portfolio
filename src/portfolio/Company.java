@@ -79,8 +79,8 @@ public class Company {
     public String name;
     private double[] prices;
     /** Array of the market values of the company */
-    protected double[] marketValues;
-    private double[] bookValues;
+    public double[] marketValues;
+    public double[] bookValues;
     /** Array of the monthly returns of the company */
     public double[] returns;
     /** Array of the Be/Mr-ratios of the company */
@@ -293,6 +293,35 @@ public class Company {
         }
         return null;
     } 
+    
+    /**
+     * Calculates the mean of the given array return
+     * @param array An array holding all the information
+     * @return average value
+     * @example
+     * <pre name="test">
+     * #TOLERANCE=0.001
+     * exampleCompany();
+     * Nokia.average(Nokia.returns) ~~~ 0.012;
+     * double[] array = new double[]{1.5, 0, -1.5, -1.6};
+     * double[] array2 = new double[]{};
+     * double[] array3 = new double[]{1.6, 5.9, 99, 6.45, 1.88};
+     * Nokia.average(array) ~~~ -0.4;
+     * Nokia.average(array2) ~~~ 0.0;
+     * Nokia.average(array3) ~~~ 22.966;
+     * </pre>
+     */
+    public double average(double[] array) {
+        if(array.length != 0) {
+            double average = 0;
+            for(int i = 0; i < array.length; i++) {
+                average += array[i];
+            }
+            average =  average/array.length;
+            return average;
+        }
+        return 0;
+    }
     
     /**
      * @param args not used

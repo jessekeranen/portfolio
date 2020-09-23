@@ -74,7 +74,7 @@ public class MainPageGUIController {
         
         if(number != comboBoxCount-1) {
             currentPortfolio = chooserPortfolios.getSelectedObject();
-            loadData(currentPortfolio);
+            loadData(currentPortfolio.portfolioReturns);
             showCompanies(currentPortfolio);  
         }
         else {
@@ -96,6 +96,12 @@ public class MainPageGUIController {
                 loadData(market.periodPortfolioRetruns[0]);
             }
         }      
+    }
+    
+    @FXML
+    private void showCompany() {
+        currentCompany = chooserCompanies.getSelectedObject();
+        CompanyGUIController.askCompany(null, currentCompany);
     }
     
     @FXML
@@ -135,6 +141,7 @@ public class MainPageGUIController {
 
     private Market market;
     private Portfolio currentPortfolio;
+    private Company currentCompany;
     private XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
     private int comboBoxCount = 1;
     
@@ -158,7 +165,8 @@ public class MainPageGUIController {
         }
         comboBox.add("whole period");
         comboBox.getSelectionModel().select(0);
-        showPortfolio(market);     
+        showPortfolio(market);   
+        chooserCompanies.setOnMouseClicked( e -> { if ( e.getClickCount() > 1 ) showCompany(); } );
     }
     
     private void addTextfields(Portfolio portfolio) {
@@ -185,7 +193,7 @@ public class MainPageGUIController {
                 chooserPortfolios.add(mrkt.years[number][i].name, mrkt.years[number][i]);
             }
             showCompanies(mrkt.years[number][0]);  
-            loadData(mrkt.years[number][0]);
+            loadData(mrkt.years[number][0].portfolioReturns);
         }
         else {
             for(int i = 0; i < mrkt.portfolioMaxCount; i++) {
@@ -205,15 +213,7 @@ public class MainPageGUIController {
         addTextfields(portfolio);
     }
     
-    private void loadData(Portfolio port) {
-       loadData(port.portfolioReturns);
-    }   
-    
     private void loadData(double[] array) {
-        pane.getChildren().clear();
-        chart.getData().clear();
-        series.getData().clear();
-        
         
         NumberAxis xAxis = new NumberAxis(1,market.months , 0.5);
         xAxis.setLabel("month");
@@ -221,14 +221,12 @@ public class MainPageGUIController {
         yAxis.setLabel("return");
         ayis = yAxis;
         axis = xAxis;
-         
-        for(int i = 0; i < array.length; i++) {
-            series.getData().add(new XYChart.Data<>(i, array[i]));
-        }
         
+        series = CompanyGUIController.loadData(array, pane, chart, series, axis, ayis);
         chart.getData().add(series);
         pane.getChildren().addAll(chart);
-    }
+       //loadData(port.portfolioReturns);
+    }   
     
     private void putData(XSSFSheet sheet, double[][] array, boolean factor) {
         if(factor == false) {

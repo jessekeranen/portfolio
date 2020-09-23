@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPortfolio.CompanyGUIController">
+   <top>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average return:" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Be/Me:" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin>
+            </Text>
+            <TextField fx:id="editName" GridPane.columnIndex="1" />
+            <TextField fx:id="editReturn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="editBeMe" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </TextField>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average market value:" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Text>
+            <TextField fx:id="editMarketValue" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
+         </padding>
+      </GridPane>
+   </top>
+   <bottom>
+      <ScrollPane fitToHeight="true" fitToWidth="true" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox>
+               <children>
+                  <BorderPane fx:id="pane2">
+                     <center>
+                        <LineChart fx:id="chart" minHeight="200.0" minWidth="200.0" title="Returns:" BorderPane.alignment="CENTER">
+                          <xAxis>
+                            <NumberAxis fx:id="axis" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="ayis" side="LEFT" />
+                          </yAxis>
+                           <padding>
+                              <Insets bottom="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </LineChart>
+                     </center>
+                  </BorderPane>
+                  <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding></TableView>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </bottom>
+</BorderPane>
