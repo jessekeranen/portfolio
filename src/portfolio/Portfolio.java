@@ -108,7 +108,6 @@ public class Portfolio {
     public double averagePortfolioBeMe;
     /** String value of the Mean of the portfolio Be/Me values */
     public String averagePortfolioBeMeString;
-    private Company company;
     
     /**
      * default constuctor

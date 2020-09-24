@@ -23,7 +23,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import portfolio.Company;
 import portfolio.Market;
 import portfolio.Portfolio;
@@ -45,7 +45,7 @@ public class MainPageGUIController {
     @FXML private TextField portfolioAveBeMe;
     @FXML private TextField portfolioAveReturn;
     @FXML private TextField portfolioAveMarketValue;
-    @FXML private BorderPane pane;
+    @FXML private Pane pane;
     @FXML private NumberAxis axis;
     @FXML private NumberAxis ayis;
     @FXML private LineChart<Number, Number> chart; 
@@ -215,17 +215,14 @@ public class MainPageGUIController {
     
     private void loadData(double[] array) {
         
-        NumberAxis xAxis = new NumberAxis(1,market.months , 0.5);
-        xAxis.setLabel("month");
-        NumberAxis yAxis = new NumberAxis(-10,10,1);
-        yAxis.setLabel("return");
-        ayis = yAxis;
-        axis = xAxis;
+        pane.getChildren().clear();
         
-        series = CompanyGUIController.loadData(array, pane, chart, series, axis, ayis);
+        ayis = CompanyGUIController.setAxis("month",1, market.months);
+        axis = CompanyGUIController.setAxis("return",-10, 10);
+         
+        series = CompanyGUIController.loadData(array, chart, series);
         chart.getData().add(series);
         pane.getChildren().addAll(chart);
-       //loadData(port.portfolioReturns);
     }   
     
     private void putData(XSSFSheet sheet, double[][] array, boolean factor) {

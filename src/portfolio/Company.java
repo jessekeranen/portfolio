@@ -80,6 +80,7 @@ public class Company {
     private double[] prices;
     /** Array of the market values of the company */
     public double[] marketValues;
+    /** An array of the book values of the company */
     public double[] bookValues;
     /** Array of the monthly returns of the company */
     public double[] returns;

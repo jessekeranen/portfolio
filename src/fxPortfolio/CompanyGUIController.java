@@ -12,12 +12,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import portfolio.Company;
 import portfolio.Month;
@@ -34,7 +33,7 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     @FXML private TextField editReturn;
     @FXML private TextField editBeMe;
     @FXML private TextField editMarketValue;
-    @FXML private BorderPane pane2;
+    @FXML private Pane pane2;
     @FXML private NumberAxis axis;
     @FXML private NumberAxis ayis;
     @FXML private LineChart<Number, Number> chart; 
@@ -44,41 +43,61 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     @FXML private TableColumn<Month, Double> marketValues;
     @FXML private TableColumn<Month, Double> bookValues;
 
+    /**
+     * Constructor
+     */
     public CompanyGUIController() {
         //
     }
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-       alusta();        
+       //alusta();        
     }
     
     private Company currentCompany;
     private XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
     
+    /**
+     * @param modalityStage For what are we modal, if null for the application
+     * @param company Company that is being observed
+     * @return null
+     */
     public static Company askCompany(Stage modalityStage, Company company) {
         return ModalController.showModal(
                 CompanyGUIController.class.getResource("CompanyGUIView.fxml"),
                 company.name,
                 modalityStage, company, null 
             );
-
     }
     
+    /**
+     * Shows the information about observed company
+     * @param company Company which is observed
+     */
     public void showCompany(Company company) {
         if( company == null) return;
         editName.setText(company.name);
         editReturn.setText(String.valueOf(company.average(company.returns)));
         editBeMe.setText(String.valueOf(company.average(company.beMeRatios)));
         editMarketValue.setText(String.valueOf(company.average(company.marketValues)));
-        setAxis(company.returns);
-        series = loadData(company.returns, pane2, chart, series, axis, ayis);
+        
+        pane2.getChildren().clear();
+        axis = setAxis("Month", 1, company.returns.length);
+        ayis = setAxis("Return", -10, 10);
+        series = loadData(company.returns, chart, series);
         chart.getData().add(series);
         pane2.getChildren().addAll(chart);
-        tableView(company);
+        chart.autosize();
         
+        tableView(company);       
     }
     
+    /**
+     * Puts needed information from ach mont about the observed company to an observable list 
+     * @param company Company that is observed
+     * @return Observable list of Months
+     */
     public ObservableList<Month> getCompanies(Company company){
         ObservableList<Month> data = FXCollections.observableArrayList();
         for(int i = 0; i < company.returns.length; i++) {
@@ -99,8 +118,7 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
         bookValues.setCellValueFactory(new PropertyValueFactory<>("bv"));
         
         tableView.setItems(getCompanies(company));
-        tableView.getColumns().addAll(returns, BeMes, marketValues, bookValues);
-   
+        tableView.getColumns().addAll(returns, BeMes, marketValues, bookValues);  
     }
 
     @Override
@@ -114,10 +132,6 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
         // TODO Auto-generated method stub
         
     }
-    
-    protected void alusta() {
-        //
-    }
 
     @Override
     public void setDefault(Company oletus) {
@@ -125,20 +139,29 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
         showCompany(currentCompany);
     }
     
-    private void setAxis(double[] array) {
-        NumberAxis xAxis = new NumberAxis(1, array.length , 0.5);
-        xAxis.setLabel("month");
-        NumberAxis yAxis = new NumberAxis(-10,10,1);
-        yAxis.setLabel("return");
-        ayis = yAxis;
-        axis = xAxis;
+    /**
+     * Creates axis for the chart
+     * @param name Name of the axis
+     * @param begin Min value
+     * @param end max Value
+     * @return Created axis
+     */
+    public static NumberAxis setAxis(String name, double begin, double end) {
+        NumberAxis axis = new NumberAxis(begin, end , 1);
+        axis.setLabel(name);
+        return axis;
     }
      
-    public static XYChart.Series<Number, Number> loadData(double[] array, BorderPane pane, LineChart<Number, Number>  chart, XYChart.Series<Number, Number> series, NumberAxis axis, NumberAxis ayis) {
-         pane.getChildren().clear();
+    /**
+     * Puts the data to a XYSeries
+     * @param array An array of the company returns
+     * @param chart Chart where the information is shown
+     * @param series Series where the information is put
+     * @return XYseiries containing the data needed
+     */
+    public static XYChart.Series<Number, Number> loadData(double[] array, LineChart<Number, Number>  chart, XYChart.Series<Number, Number> series) {
          chart.getData().clear();
          series.getData().clear();
-         
           
          for(int i = 0; i < array.length; i++) {
              series.getData().add(new XYChart.Data<>(i, array[i]));

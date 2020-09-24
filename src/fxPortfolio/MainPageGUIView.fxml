@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
@@ -126,9 +127,9 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </GridPane>
-                  <BorderPane fx:id="pane">
-                     <center>
-                        <LineChart fx:id="chart" BorderPane.alignment="CENTER">
+                  <Pane fx:id="pane">
+                     <children>
+                        <LineChart fx:id="chart" animated="false">
                           <xAxis>
                             <NumberAxis fx:id="axis" side="BOTTOM" />
                           </xAxis>
@@ -136,8 +137,8 @@
                             <NumberAxis fx:id="ayis" side="LEFT" />
                           </yAxis>
                         </LineChart>
-                     </center>
-                  </BorderPane>
+                     </children>
+                  </Pane>
                </children>
             </VBox>
          </content>
