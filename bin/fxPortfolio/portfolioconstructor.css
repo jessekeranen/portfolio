@@ -1,1 +1,21 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.root{
+	-fx-background-color: #444444;	
+}
+.label{
+	-fx-text-fill: #989898;
+	-fx-background-image: url("excel2.png");
+	-fx-background-size: 20px; 
+	-fx-background-repeat: no-repeat;
+	
+}
+#vbox{
+	-fx-background-color: #302F2F;	
+	-fx-margin: 3px;
+	-fx-padding: 5px;
+	-fx-border-width: 2px;
+	-fx-border-color: #242424;
+	
+}
+.pane{
+	-fx-background-color: #000000;	
+}

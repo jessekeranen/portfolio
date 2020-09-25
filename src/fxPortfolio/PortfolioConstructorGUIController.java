@@ -50,11 +50,13 @@ public class PortfolioConstructorGUIController {
         final FXMLLoader ldr = new FXMLLoader(getClass().getResource("MainPageGUIView.fxml"));
         Pane root = (Pane)ldr.load();
         final MainPageGUIController marketCtrl = (MainPageGUIController)ldr.getController();
-        Scene scene = new Scene(root,1000,600);
+        Scene scene = new Scene(root,1035,630);
+        scene.getStylesheets().add(getClass().getResource("mainpagegui.css").toExternalForm());
         
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         window.setScene(scene);
         window.show();
+        window.setTitle("Portfolio");
         
         //int MarketValueCount = Integer.valueOf(MVCount.getText()); 
         //int monthCount = Integer.valueOf(months.getText()); 

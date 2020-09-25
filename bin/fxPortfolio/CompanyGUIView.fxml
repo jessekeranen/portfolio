@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,89 +12,98 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPortfolio.CompanyGUIController">
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
-         <content>
-            <VBox>
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" BorderPane.alignment="CENTER">
+         <items>
+            <HBox SplitPane.resizableWithParent="false">
                <children>
-                  <HBox>
+                  <GridPane maxHeight="200.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
                      <children>
-                        <GridPane maxHeight="200.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
-                                 <GridPane.margin>
-                                    <Insets left="5.0" />
-                                 </GridPane.margin>
-                              </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average return:" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets left="5.0" />
-                                 </GridPane.margin>
-                              </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Be/Me:" GridPane.rowIndex="2">
-                                 <GridPane.margin>
-                                    <Insets left="5.0" />
-                                 </GridPane.margin>
-                              </Text>
-                              <TextField fx:id="editName" GridPane.columnIndex="1" />
-                              <TextField fx:id="editReturn" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="editBeMe" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                              </TextField>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average market value:" GridPane.rowIndex="3">
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Text>
-                              <TextField fx:id="editMarketValue" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                           </children>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
-                           </padding>
-                        </GridPane>
-                        <Pane fx:id="pane2">
-                           <children>
-                              <LineChart fx:id="chart" animated="false" title="Returns:">
-                                <xAxis>
-                                  <NumberAxis fx:id="axis" side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                  <NumberAxis fx:id="ayis" side="LEFT" />
-                                </yAxis>
-                                 <padding>
-                                    <Insets bottom="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </LineChart>
-                           </children>
-                        </Pane>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average return:" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average Be/Me:" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <TextField fx:id="editName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="editReturn" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="editBeMe" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </TextField>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average market value:" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <TextField fx:id="editMarketValue" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average divident:" GridPane.rowIndex="5">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Company information:" wrappingWidth="128.40625">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
                      </children>
-                  </HBox>
-                  <TableView fx:id="tableView">
                      <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
                      </padding>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy></TableView>
+                  </GridPane>
+                  <Pane fx:id="pane2">
+                     <children>
+                        <LineChart fx:id="chart" animated="false" title="Returns:">
+                          <xAxis>
+                            <NumberAxis fx:id="axis" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="ayis" side="LEFT" />
+                          </yAxis>
+                           <padding>
+                              <Insets bottom="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </LineChart>
+                     </children>
+                  </Pane>
                </children>
-            </VBox>
-         </content>
-      </ScrollPane>
+            </HBox>
+            <TableView fx:id="tableView">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </items>
+      </SplitPane>
    </center>
 </BorderPane>
