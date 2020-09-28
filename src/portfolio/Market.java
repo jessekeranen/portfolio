@@ -30,6 +30,9 @@ public class Market {
     public Portfolio[][] factorYears;
     /** Two dimensional array of the factor portfolio retruns for whole period for each factor portfolio */
     public double[][] periodFactorPortfolioRetruns;
+    public double[] marketReturns;
+    private double[] marketTotalMarketValues;
+    public double averageReturn;
     
     /**
      * Constructor
@@ -54,7 +57,40 @@ public class Market {
      */
     public void addCompany(Company company) {
         companies.add(company);
-    }     
+    }  
+    
+    public void averageReturn() {
+        for(int i = 0; i < months; i++) {
+            averageReturn += marketReturns[i];
+        }
+        averageReturn = averageReturn/months;
+    }
+    
+    /**
+     * Calculates total market value of the market for each month
+     */
+    public void totalMarketValues() {
+        double[] array = new double[months];
+        for(int i = 0; i < months; i++) {
+            for(int j = 0; j < companies.size(); j++) {
+                array[i] += companies.get(j).marketValues[i];
+            }
+        }
+        marketTotalMarketValues = array;
+    }
+    
+    /**
+     * Calculates monthly weighted returns of the whole market
+     */
+    public void marketReturns() {
+        double[] array = new double[months];
+        for(int i = 0; i < months; i++) {
+            for(int j = 0; j < companies.size(); j++) {
+                array[i] += companies.get(j).returns[i]*(companies.get(j).marketValues[i]/marketTotalMarketValues[i]);
+            }
+        }
+        marketReturns = array;
+    }
     
     /**
      * Adds companies to the portfolio depending on their market and book values

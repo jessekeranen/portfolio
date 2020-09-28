@@ -17,8 +17,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import portfolio.Company;
+import portfolio.Market;
 import portfolio.Month;
 
 /**
@@ -29,10 +31,13 @@ import portfolio.Month;
  */
 public class CompanyGUIController implements ModalControllerInterface<Company>, Initializable{
     
-    @FXML private TextField editName;
-    @FXML private TextField editReturn;
-    @FXML private TextField editBeMe;
-    @FXML private TextField editMarketValue;
+    @FXML private Text editName;
+    @FXML private Text editReturn;
+    @FXML private Text editBeMe;
+    @FXML private Text editMarketValue;
+    @FXML private Text editSharpe;
+    @FXML private Text editTreynor;
+    @FXML private Text editBeta;
     @FXML private Pane pane2;
     @FXML private NumberAxis axis;
     @FXML private NumberAxis ayis;
@@ -57,6 +62,8 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     
     private Company currentCompany;
     private XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
+    private double averageReturn;
+    private Market market;
     
     /**
      * @param modalityStage For what are we modal, if null for the application
@@ -71,6 +78,14 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
             );
     }
     
+    public void setMarket(Market market) {
+        market(market);
+    }
+    
+    public void market(Market market) {
+        this.market = market;
+    }
+    
     /**
      * Shows the information about observed company
      * @param company Company which is observed
@@ -78,9 +93,13 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     public void showCompany(Company company) {
         if( company == null) return;
         editName.setText(company.name);
-        editReturn.setText(String.valueOf(company.average(company.returns)));
+        averageReturn = company.average(company.returns);
+        editReturn.setText(String.valueOf(averageReturn));
         editBeMe.setText(String.valueOf(company.average(company.beMeRatios)));
         editMarketValue.setText(String.valueOf(company.average(company.marketValues)));
+        editSharpe.setText(String.valueOf(company.sharpeRatio));
+        editTreynor.setText(String.valueOf(company.treynorRatio));
+        editBeta.setText(String.valueOf(company.beta));
         
         pane2.getChildren().clear();
         axis = setAxis("Month", 1, company.returns.length);

@@ -153,6 +153,15 @@ public class MainPageGUIController {
     public void setMarket(Market market, int mvCount, int bmCount) {
         this.market = market;
         //chooserPortfolios.addSelectionListener(e-> showPortfolio(market));
+        market.totalMarketValues();
+        market.marketReturns();
+        market.averageReturn();
+        
+        
+        
+        for(int j = 0; j < market.companies.size(); j++) {
+            market.companies.get(j).treynorRatio(market.marketReturns, market.averageReturn);
+        }
         
         for(int i = 0; i < Company.years; i++) {
             market.constructPortfolios(i, mvCount, bmCount, 0);

@@ -90,6 +90,11 @@ public class Company {
     public static int rows;
     @SuppressWarnings("unused")
     private double[] dividends;
+    private double[] rf;
+    private double averageReturn;
+    public double sharpeRatio;
+    public double treynorRatio;
+    public double beta;
     
     /**
      * Reads the input sheet and adds the information from the sheet to certain company
@@ -106,6 +111,7 @@ public class Company {
         XSSFCell cell;        
        
         rows = sheet.getPhysicalNumberOfRows();
+        rf = new double[rows-1];
         years = rows/12;
         
         prices = new double[rows-1];
@@ -135,11 +141,14 @@ public class Company {
                 }
                 
             } 
+            rf();
             returns = returns();
+            averageReturn = average(returns);
             dividends = dividends(sheet4, number);
             marketValues = marketValues(sheet3, number);
             bookValues = bookValues(sheet2, number);  
             beMeRatios = beMeRatio();
+            sharpeRatio = sharpeRatio();
         }  
         catch(Exception e)  {  
             e.printStackTrace();  
@@ -322,6 +331,61 @@ public class Company {
             return average;
         }
         return 0;
+    }
+    
+    /**
+     * Calculates the Sharpe ratio of the company
+     * @return Sharpe ratio of the company
+     * @example
+     * <pre name="test">
+     * #TOLERANCE=0.000001
+     * exampleCompany();
+     * Nokia.sharpeRatio ~~~ -0.112799;
+     * </pre>
+     */
+    private double sharpeRatio() {
+        double std = 0;
+        double excessReturn = 0;
+        for(int i = 1; i < rows - 1; i++) {
+            excessReturn += returns[i] - rf[i];
+        }
+        excessReturn = excessReturn/(rows-2);
+        
+        for(int j = 1; j < rows -1; j++) {
+            std += Math.pow((returns[j] - rf[j] - excessReturn), 2);
+        }
+        std = Math.sqrt(std/(rows-2));
+        
+        return excessReturn/std;
+    }
+    
+    /**
+     * Calculates the Treynor ratio of the company. Beta cofficient of the company is calculated based 
+     * on five years of data
+     * @param marketReturns An array of the market returns
+     * @param aveMarketReturn Mean of the market returns
+     */
+    public void treynorRatio(double[] marketReturns, double aveMarketReturn) {
+        if(returns.length < 60) return;
+        double covariance = 0;
+        for(int i = rows-61; i <rows-1; i++) {
+            covariance += (returns[i]-averageReturn)*(marketReturns[i]-aveMarketReturn);
+        }
+        covariance = covariance/60;
+        double variance = 0;
+        for(int j = rows-61; j < marketReturns.length; j++) {
+            variance += Math.pow((returns[j]-averageReturn), 2);
+        }
+        variance = variance/60;
+        beta = covariance/variance;
+        double oneYearProfit = ((prices[rows-2]-prices[rows-14])/prices[rows-14]);
+        treynorRatio = oneYearProfit/beta;
+    }
+    
+    private void rf() {
+        for(int i = 0; i < rf.length; i++) {
+            rf[i] = 0.01;
+        }
     }
     
     /**
