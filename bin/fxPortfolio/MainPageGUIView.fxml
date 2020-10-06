@@ -20,6 +20,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane id="pane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPortfolio.MainPageGUIController">
    <top>
@@ -75,8 +76,10 @@
                <children>
                   <GridPane prefWidth="315.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="241.0" minWidth="10.0" prefWidth="168.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="337.0" minWidth="10.0" prefWidth="322.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="241.0" minWidth="10.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="337.0" minWidth="0.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="351.0" minWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="351.0" minWidth="20.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -85,33 +88,60 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField fx:id="portfolioName" GridPane.columnIndex="1">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </TextField>
-                        <TextField fx:id="portfolioAveReturn" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </TextField>
-                        <TextField fx:id="portfolioAveBeMe" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </TextField>
                         <Label text="Name" />
                         <Label text="Average return" GridPane.rowIndex="1" />
                         <Label text="Average Be/Me" GridPane.rowIndex="2" />
                         <Label text="Average market value" GridPane.rowIndex="3" />
-                        <TextField fx:id="portfolioAveMarketValue" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </TextField>
+                        <Label text="Sharpe ratio:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label text="Treynor ratio:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label text="Beta coefficient:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Text fx:id="portfolioName" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
+                        <Text fx:id="portfolioAveReturn" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text fx:id="portfolioAveBeMe" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text fx:id="portfolioAveMarketValue" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text fx:id="portfolioSharpe" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Text fx:id="portfolioTreynor" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Text fx:id="portfolioBeta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
+                  </GridPane>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Return" GridPane.rowIndex="1" />
+                        <Label text="Market Value" GridPane.rowIndex="2" />
+                        <Label text="Book Value" GridPane.rowIndex="3" />
+                        <Label text="Year n" GridPane.columnIndex="1" />
+                        <Label text="Year n-1" GridPane.columnIndex="2" />
+                        <Label text="Year n-2" GridPane.columnIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                     </children>
+                     <padding>
+                        <Insets left="5.0" />
                      </padding>
                   </GridPane>
                   <Pane fx:id="pane">
@@ -125,6 +155,9 @@
                           </yAxis>
                         </LineChart>
                      </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
                   </Pane>
                </children>
             </VBox>
@@ -137,7 +170,7 @@
    <left>
       <SplitPane id="splitpane" dividerPositions="0.16820702402957485" orientation="VERTICAL" BorderPane.alignment="CENTER">
         <items>
-            <VBox SplitPane.resizableWithParent="false">
+            <VBox maxHeight="85.0" SplitPane.resizableWithParent="false">
                <children>
                   <TextField prefWidth="250.0">
                      <VBox.margin>
@@ -151,7 +184,10 @@
                   </ComboBoxChooser>
                   <Pane id="pane1">
                      <children>
-                        <Label text="Name of the portfolio:" />
+                        <Label text="Name of the portfolio:">
+                           <padding>
+                              <Insets bottom="5.0" />
+                           </padding></Label>
                      </children>
                      <VBox.margin>
                         <Insets left="5.0" right="5.0" top="5.0" />
@@ -169,7 +205,7 @@
    <right>
       <SplitPane dividerPositions="0.04672897196261682" orientation="VERTICAL" BorderPane.alignment="CENTER">
         <items>
-            <Pane id="pane1" SplitPane.resizableWithParent="false">
+            <Pane id="pane1" maxHeight="21.0" SplitPane.resizableWithParent="false">
                <children>
                   <Label text="Name of the company:" />
                </children>

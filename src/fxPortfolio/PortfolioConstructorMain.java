@@ -3,6 +3,7 @@ package fxPortfolio;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
 
@@ -21,8 +22,11 @@ public class PortfolioConstructorMain extends Application {
             //final PortfolioConstructorGUIController portfolioconstructorCtrl = (PortfolioConstructorGUIController) ldr.getController();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("portfolioconstructor.css").toExternalForm());
-            primaryStage.setScene(scene);
             primaryStage.setTitle("PortfolioConstructor");
+            @SuppressWarnings("resource")
+            Image icon = new Image(getClass().getResourceAsStream("icon.png"));
+            primaryStage.getIcons().add(icon);
+            primaryStage.setScene(scene);
             primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
@@ -30,7 +34,7 @@ public class PortfolioConstructorMain extends Application {
     }
 
     /**
-     * @param args not used
+     * @param args cmd parameters
      */
     public static void main(String[] args) {
         launch(args);

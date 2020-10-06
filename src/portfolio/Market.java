@@ -30,9 +30,13 @@ public class Market {
     public Portfolio[][] factorYears;
     /** Two dimensional array of the factor portfolio retruns for whole period for each factor portfolio */
     public double[][] periodFactorPortfolioRetruns;
+    /** An array of weighted average monthly returns of the whole market */
     public double[] marketReturns;
     private double[] marketTotalMarketValues;
+    /** Average return */
     public double averageReturn;
+    /** An array of the risk free returns */
+    public double rf[];
     
     /**
      * Constructor
@@ -49,6 +53,7 @@ public class Market {
         this.sizeBreakPoints = new double[MarketValueCounts-1];
         this.factorYears = new Portfolio[months/12][6];
         this.periodFactorPortfolioRetruns = new double[2][months];
+        rf();
     }
     
     /**
@@ -59,6 +64,9 @@ public class Market {
         companies.add(company);
     }  
     
+    /**
+     * Mean of the monthly weighted average returns
+     */
     public void averageReturn() {
         for(int i = 0; i < months; i++) {
             averageReturn += marketReturns[i];
@@ -73,7 +81,7 @@ public class Market {
         double[] array = new double[months];
         for(int i = 0; i < months; i++) {
             for(int j = 0; j < companies.size(); j++) {
-                array[i] += companies.get(j).marketValues[i];
+                array[i] += companies.get(j).getDouble(1, i);
             }
         }
         marketTotalMarketValues = array;
@@ -86,7 +94,7 @@ public class Market {
         double[] array = new double[months];
         for(int i = 0; i < months; i++) {
             for(int j = 0; j < companies.size(); j++) {
-                array[i] += companies.get(j).returns[i]*(companies.get(j).marketValues[i]/marketTotalMarketValues[i]);
+                array[i] += companies.get(j).getDouble(0, i)*(companies.get(j).getDouble(1, i)/marketTotalMarketValues[i]);
             }
         }
         marketReturns = array;
@@ -153,8 +161,8 @@ public class Market {
     public ArrayList<Double> bemeRatios(int month) {
         ArrayList<Double> ratios = new ArrayList<Double>(1);
         for (int i = 0; i < companies.size(); i++) {
-            if(companies.get(i).beMeRatios[month] != 0) {
-               ratios.add(companies.get(i).beMeRatios[month]);
+            if(companies.get(i).getDouble(2, month) != 0) {
+               ratios.add(companies.get(i).getDouble(2, month));
             }
         }
         return ratios;
@@ -168,8 +176,8 @@ public class Market {
     public ArrayList<Double> sizes(int month){
         ArrayList<Double> sizeRatios = new ArrayList<Double>();
         for (int i = 0; i < companies.size(); i++) {
-            if(companies.get(i).marketValues[month] != 0) {
-            sizeRatios.add(companies.get(i).marketValues[month]);
+            if(companies.get(i).getDouble(1, month) != 0) {
+            sizeRatios.add(companies.get(i).getDouble(1, month));
             }
         }
         return sizeRatios;
@@ -184,8 +192,8 @@ public class Market {
             for(int j = 0; j < portfolioMaxCount; j++) {
                 int beginning = 0; 
                 for(int i = 0; i < months/12; i++) {
-                    System.arraycopy(years[i][j].portfolioReturns, 0, periodPortfolioRetruns[j], beginning, years[i][j].portfolioReturns.length);
-                    beginning += years[i][j].portfolioReturns.length;
+                    System.arraycopy(years[i][j].getArray(0), 0, periodPortfolioRetruns[j], beginning, years[i][j].getArray(0).length);
+                    beginning += years[i][j].getArray(0).length;
                 }
             }
         }
@@ -204,7 +212,7 @@ public class Market {
     public String periodPortfolioMV(int number) {
         double average = 0;
         for(int i = 0; i < years.length; i++) {
-            average += years[i][number].averagePortfolioMarketValue;
+            average += years[i][number].getDouble(1, i);
         }
         average = average/years.length;
         return String.format("%.2f", average);
@@ -258,9 +266,16 @@ public class Market {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for(int i = 0; i < companies.size(); i++) {
-            s.append(companies.get(i).name + " ");
+            s.append(companies.get(i).getName() + " ");
         }
         return s.toString();
+    }
+    
+    private void rf() {
+        rf = new double[months];
+        for(int i = 0; i < months; i++) {
+            rf[i] = 0.01;
+        }
     }
     
     /**

@@ -22,8 +22,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import portfolio.Company;
 import portfolio.Market;
 import portfolio.Portfolio;
@@ -35,16 +35,15 @@ import portfolio.Portfolio;
  */
 public class MainPageGUIController {
     
-    @FXML
-    ListChooser<Portfolio> chooserPortfolios;
-    
-    @FXML
-    ListChooser<Company> chooserCompanies;
-    
-    @FXML private TextField portfolioName;
-    @FXML private TextField portfolioAveBeMe;
-    @FXML private TextField portfolioAveReturn;
-    @FXML private TextField portfolioAveMarketValue;
+    @FXML ListChooser<Portfolio> chooserPortfolios;  
+    @FXML ListChooser<Company> chooserCompanies;  
+    @FXML private Text portfolioName;
+    @FXML private Text portfolioAveBeMe;
+    @FXML private Text portfolioAveReturn;
+    @FXML private Text portfolioAveMarketValue;
+    @FXML private Text portfolioSharpe;
+    @FXML private Text portfolioTreynor;
+    @FXML private Text portfolioBeta;
     @FXML private Pane pane;
     @FXML private NumberAxis axis;
     @FXML private NumberAxis ayis;
@@ -74,14 +73,14 @@ public class MainPageGUIController {
         
         if(number != comboBoxCount-1) {
             currentPortfolio = chooserPortfolios.getSelectedObject();
-            loadData(currentPortfolio.portfolioReturns);
+            loadData(currentPortfolio.getArray(0));
             showCompanies(currentPortfolio);  
         }
         else {
             //showPortfolio(market);
             if(chooserPortfolios.getSelectedIndex() != -1) {
                 chooserCompanies.clear();
-                portfolioName.setText(market.years[0][chooserPortfolios.getSelectedIndex()].name); 
+                portfolioName.setText(market.years[0][chooserPortfolios.getSelectedIndex()].getString(0)); 
                 portfolioAveBeMe.setText("");
                 portfolioAveMarketValue.setText(market.periodPortfolioMV(chooserPortfolios.getSelectedIndex()));
                 portfolioAveReturn.setText(market.periodAverageReturn(chooserPortfolios.getSelectedIndex()));
@@ -89,7 +88,7 @@ public class MainPageGUIController {
                 }
             else {
                 chooserCompanies.clear();
-                portfolioName.setText(market.years[0][0].name); 
+                portfolioName.setText(market.years[0][0].getString(0)); 
                 portfolioAveBeMe.setText("");
                 portfolioAveMarketValue.setText(market.periodPortfolioMV(0));
                 portfolioAveReturn.setText(market.periodAverageReturn(0));
@@ -158,7 +157,8 @@ public class MainPageGUIController {
         market.averageReturn();
         
         
-        
+        /** Treynor ratios are calculated at this point because to be able to calculate treynor ratio we need to know 
+         * market returns which we don´t know before we have created all the companies */
         for(int j = 0; j < market.companies.size(); j++) {
             market.companies.get(j).treynorRatio(market.marketReturns, market.averageReturn);
         }
@@ -179,10 +179,13 @@ public class MainPageGUIController {
     }
     
     private void addTextfields(Portfolio portfolio) {
-        portfolioName.setText(portfolio.name); 
-        portfolioAveBeMe.setText(portfolio.averagePortfolioBeMeString);
-        portfolioAveMarketValue.setText(portfolio.averagePortfolioMarketValueString);
-        portfolioAveReturn.setText(portfolio.averagePortfolioReturnString);
+        portfolioName.setText(portfolio.getName()); 
+        portfolioAveBeMe.setText(portfolio.getString(2));
+        portfolioAveMarketValue.setText(portfolio.getString(1));
+        portfolioAveReturn.setText(portfolio.getString(0));
+        portfolioSharpe.setText(String.valueOf(portfolio.sharpeRatio(portfolio.getArray(0), market.rf)));
+        portfolioTreynor.setText(String.valueOf(portfolio.treynorRatio(market.marketReturns, market.averageReturn)));
+        portfolioBeta.setText(String.valueOf(portfolio.beta));
     }
     
     private void showPortfolio(Market mrkt) {
@@ -199,14 +202,14 @@ public class MainPageGUIController {
          */
         if(number != comboBoxCount-1) {
             for(int i = 0; i < mrkt.portfolioMaxCount; i++) {
-                chooserPortfolios.add(mrkt.years[number][i].name, mrkt.years[number][i]);
+                chooserPortfolios.add(mrkt.years[number][i].getName(), mrkt.years[number][i]);
             }
             showCompanies(mrkt.years[number][0]);  
-            loadData(mrkt.years[number][0].portfolioReturns);
+            loadData(mrkt.years[number][0].getArray(0));
         }
         else {
             for(int i = 0; i < mrkt.portfolioMaxCount; i++) {
-                chooserPortfolios.add(mrkt.years[0][i].name, mrkt.years[0][i]);
+                chooserPortfolios.add(mrkt.years[0][i].getString(0), mrkt.years[0][i]);
             }
             show();
         }
@@ -217,7 +220,7 @@ public class MainPageGUIController {
         chooserCompanies.clear();
         if(portfolio == null) return;
         for(int i = 0; i < portfolio.companies.size(); i++) {
-            chooserCompanies.add(portfolio.companies.get(i).name, portfolio.companies.get(i));
+            chooserCompanies.add(portfolio.companies.get(i).getName(), portfolio.companies.get(i));
         }
         addTextfields(portfolio);
     }
@@ -238,7 +241,7 @@ public class MainPageGUIController {
         if(factor == false) {
             String[] names = new String[market.years[0].length];
             for(int i = 0; i < names.length; i++) {
-                names[i] = market.years[0][i].name;
+                names[i] = market.years[0][i].getString(0);
             }
             putData(sheet, array, names);
         }
@@ -327,12 +330,12 @@ public class MainPageGUIController {
                 cell.setCellValue("");  
                 cell.setCellStyle(cellStyle);
                 cell = rows[rownum++].createCell(cellnum);
-                cell.setCellValue(market.years[0][j].name);
+                cell.setCellValue(market.years[0][j].getString(0));
                 cell.setCellStyle(cellStyle2);
                 for(int k = 0; k < market.years[i][j].companies.size(); k++) {  
                     cell = rows[rownum].createCell(cellnum);
                     cell.setCellStyle(cellStyle);
-                    cell.setCellValue(market.years[i][j].companies.get(k).name);
+                    cell.setCellValue(market.years[i][j].companies.get(k).getName());
                     rownum++;
                 }
             }

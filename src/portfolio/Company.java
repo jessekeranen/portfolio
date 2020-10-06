@@ -71,30 +71,17 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
  * }
  * </pre>
  */
-public class Company {
+public class Company extends Asset {
     
     /** Number of years in data */
     public static int years;
-    /** Name of the company */
-    public String name;
+    //private String name;
     private double[] prices;
-    /** Array of the market values of the company */
-    public double[] marketValues;
-    /** An array of the book values of the company */
-    public double[] bookValues;
-    /** Array of the monthly returns of the company */
-    public double[] returns;
-    /** Array of the Be/Mr-ratios of the company */
-    public double[] beMeRatios;
+    private double[] bookValues;
     /** Number of the rows in data sheet */
     public static int rows;
     @SuppressWarnings("unused")
     private double[] dividends;
-    private double[] rf;
-    private double averageReturn;
-    public double sharpeRatio;
-    public double treynorRatio;
-    public double beta;
     
     /**
      * Reads the input sheet and adds the information from the sheet to certain company
@@ -102,16 +89,16 @@ public class Company {
      * @param sheet2 where the book value information is read
      * @param sheet3 where the market value information is read
      * @param sheet4 where the dividend information is read
+     * @param rf Risk free rates
      * @param number indicates different companies
      */
-    public Company(XSSFSheet sheet, XSSFSheet sheet2, XSSFSheet sheet3, XSSFSheet sheet4, int number) {
+    public Company(XSSFSheet sheet, XSSFSheet sheet2, XSSFSheet sheet3, XSSFSheet sheet4, double[] rf, int number) {
         try  
         {  
         XSSFRow row;
         XSSFCell cell;        
        
         rows = sheet.getPhysicalNumberOfRows();
-        rf = new double[rows-1];
         years = rows/12;
         
         prices = new double[rows-1];
@@ -141,14 +128,13 @@ public class Company {
                 }
                 
             } 
-            rf();
             returns = returns();
             averageReturn = average(returns);
             dividends = dividends(sheet4, number);
             marketValues = marketValues(sheet3, number);
             bookValues = bookValues(sheet2, number);  
             beMeRatios = beMeRatio();
-            sharpeRatio = sharpeRatio();
+            sharpeRatio = super.sharpeRatio(returns, rf);
         }  
         catch(Exception e)  {  
             e.printStackTrace();  
@@ -302,90 +288,30 @@ public class Company {
             e.printStackTrace();  
         }
         return null;
-    } 
-    
-    /**
-     * Calculates the mean of the given array return
-     * @param array An array holding all the information
-     * @return average value
-     * @example
-     * <pre name="test">
-     * #TOLERANCE=0.001
-     * exampleCompany();
-     * Nokia.average(Nokia.returns) ~~~ 0.012;
-     * double[] array = new double[]{1.5, 0, -1.5, -1.6};
-     * double[] array2 = new double[]{};
-     * double[] array3 = new double[]{1.6, 5.9, 99, 6.45, 1.88};
-     * Nokia.average(array) ~~~ -0.4;
-     * Nokia.average(array2) ~~~ 0.0;
-     * Nokia.average(array3) ~~~ 22.966;
-     * </pre>
-     */
-    public double average(double[] array) {
-        if(array.length != 0) {
-            double average = 0;
-            for(int i = 0; i < array.length; i++) {
-                average += array[i];
-            }
-            average =  average/array.length;
-            return average;
-        }
-        return 0;
     }
     
     /**
-     * Calculates the Sharpe ratio of the company
-     * @return Sharpe ratio of the company
-     * @example
-     * <pre name="test">
-     * #TOLERANCE=0.000001
-     * exampleCompany();
-     * Nokia.sharpeRatio ~~~ -0.112799;
-     * </pre>
+     * Returns value of from one of the companys arrays
+     * @param number In which array is requested information
+     * @param k Index of wanted information
+     * @return Company variable
      */
-    private double sharpeRatio() {
-        double std = 0;
-        double excessReturn = 0;
-        for(int i = 1; i < rows - 1; i++) {
-            excessReturn += returns[i] - rf[i];
+    public double getDoubleCompany(int number, int k) {
+        switch(number) {
+        case 0: return prices[k];
+        case 1: return bookValues[k];
+        case 2: return dividends[k];
+        default: return 0;
         }
-        excessReturn = excessReturn/(rows-2);
-        
-        for(int j = 1; j < rows -1; j++) {
-            std += Math.pow((returns[j] - rf[j] - excessReturn), 2);
-        }
-        std = Math.sqrt(std/(rows-2));
-        
-        return excessReturn/std;
     }
     
     /**
-     * Calculates the Treynor ratio of the company. Beta cofficient of the company is calculated based 
-     * on five years of data
+     * Calculates the treynor ratio of the company
      * @param marketReturns An array of the market returns
-     * @param aveMarketReturn Mean of the market returns
+     * @param aveMarketReturn Average market return
      */
     public void treynorRatio(double[] marketReturns, double aveMarketReturn) {
-        if(returns.length < 60) return;
-        double covariance = 0;
-        for(int i = rows-61; i <rows-1; i++) {
-            covariance += (returns[i]-averageReturn)*(marketReturns[i]-aveMarketReturn);
-        }
-        covariance = covariance/60;
-        double variance = 0;
-        for(int j = rows-61; j < marketReturns.length; j++) {
-            variance += Math.pow((returns[j]-averageReturn), 2);
-        }
-        variance = variance/60;
-        beta = covariance/variance;
-        double oneYearProfit = ((prices[rows-2]-prices[rows-14])/prices[rows-14]);
-        treynorRatio = oneYearProfit/beta;
-    }
-    
-    private void rf() {
-        for(int i = 0; i < rf.length; i++) {
-            rf[i] = 0.01;
-        }
+        treynorRatio = super.treynorRatio(marketReturns, aveMarketReturn, returns, prices, averageReturn, true);
     }
     
     /**

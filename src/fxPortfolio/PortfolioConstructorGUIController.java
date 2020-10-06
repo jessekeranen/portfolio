@@ -26,20 +26,12 @@ import portfolio.Market;
  */
 public class PortfolioConstructorGUIController {
 
-    @FXML
-    private TextField textBox;
-    
-    @FXML
-    private TextField MVCount;
-    
-    @FXML
-    private TextField BeMeCount;
-    
-    @FXML
-    private TextField months;
-
-    @FXML
-    private Button okButton;
+    @FXML private TextField textBox;    
+    @FXML private TextField MVCount; 
+    @FXML private TextField BeMeCount;   
+    @FXML private TextField textBoxRF;   
+    @FXML private TextField months;
+    @FXML private Button okButton;
     
     private Market market;    
 
@@ -50,7 +42,7 @@ public class PortfolioConstructorGUIController {
         final FXMLLoader ldr = new FXMLLoader(getClass().getResource("MainPageGUIView.fxml"));
         Pane root = (Pane)ldr.load();
         final MainPageGUIController marketCtrl = (MainPageGUIController)ldr.getController();
-        Scene scene = new Scene(root,1035,630);
+        Scene scene = new Scene(root,1035,900);
         scene.getStylesheets().add(getClass().getResource("mainpagegui.css").toExternalForm());
         
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -93,7 +85,7 @@ public class PortfolioConstructorGUIController {
         market = new Market(MarketValueCount, BeMeCounts, monthCount);
         
         for(int i = 0; i < sheet.getRow(1).getPhysicalNumberOfCells(); i++) {
-            Company company = new Company(sheet, sheet2, sheet3, sheet4, i);
+            Company company = new Company(sheet, sheet2, sheet3, sheet4, market.rf, i);
             market.addCompany(company);
             }
         }

@@ -32,6 +32,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label text="Company return file:" wrapText="true">
@@ -61,18 +63,30 @@
                      </GridPane.margin>
                   </Label>
                   <TextField fx:id="textBoxBV" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of market value breakpoints:" GridPane.rowIndex="3">
+                  <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of market value breakpoints:" GridPane.rowIndex="5">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Text>
-                  <TextField fx:id="MVCount" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of BE/ME breakpoints:" GridPane.rowIndex="4">
+                  <TextField fx:id="MVCount" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of BE/ME breakpoints:" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Text>
-                  <TextField fx:id="BeMeCount" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="BeMeCount" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Label text="Risk free returns file here:" GridPane.rowIndex="4">
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="textBoxRF" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="Divident file here:" GridPane.rowIndex="3">
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="textBoxDV" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
                <padding>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />

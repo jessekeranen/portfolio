@@ -84,30 +84,15 @@ import java.util.ArrayList;
  *      portfolio.portfolioReturn(0);
  * }
  */
-public class Portfolio {
+public class Portfolio extends Asset {
     
-    /** Name of the portfolio. Indicates the size and value of the companies in it */
-    public String name;
     /** Array that includes all the companies that portfolio consist of */
     public ArrayList<Company> companies = new ArrayList<Company>();
-    /** Weighted monthly average portfolio return */
-    public double[] portfolioReturns = new double[12];
-    /** An array of total market values of the portfolio for each month */
-    public double[] portfolioMarketValue = new double[12];
-    /** An array of average portfolio Be/Me ratios */
-    public double[] portfolioBeMe = new double[12];
-    /** Mean of the portfolio returns */
-    public double averagePortfolioReturn;
-    /** String value of the mean of the portfolio returns */
-    public String averagePortfolioReturnString;
-    /** Mean of the portfolios market values */
-    public double averagePortfolioMarketValue;
-    /** String value of the mean of the portfolio market values */
-    public String averagePortfolioMarketValueString;
-    /** Mean of the portfolios average Be/Me values */
-    public double averagePortfolioBeMe;
-    /** String value of the Mean of the portfolio Be/Me values */
-    public String averagePortfolioBeMeString;
+    private String averagePortfolioReturnString;
+    private String averagePortfolioMarketValueString;
+    private double averagePortfolioBeMe;
+    private String averagePortfolioBeMeString;
+
     
     /**
      * default constuctor
@@ -116,6 +101,9 @@ public class Portfolio {
      */
     public Portfolio(int size, int value) {
         this.name = "portfolio " + size + value;
+        this.returns = new double[12];
+        this.marketValues = new double[12];
+        this.beMeRatios = new double[12];
     }
    
     
@@ -156,7 +144,7 @@ public class Portfolio {
         for(int i = 0; i < 12; i++) {
             for(int j = 0; j < companies.size(); j++) {
                 int month = period*12+i;
-                portfolioReturns[i] += companies.get(j).returns[month]*(companies.get(j).marketValues[month]/portfolioMarketValue[i]); 
+                returns[i] += companies.get(j).getDouble(0, month)*(companies.get(j).getDouble(1, month)/marketValues[i]); 
             }
         }
     }
@@ -165,41 +153,12 @@ public class Portfolio {
      * Calculates the average portfolio return
      */
     public void calculateAverages() {
-        this.averagePortfolioReturn =  average(portfolioReturns);
-        this.averagePortfolioReturnString = averageString(averagePortfolioReturn);
-        this.averagePortfolioMarketValue = average(portfolioMarketValue);
-        this.averagePortfolioMarketValueString = averageString(averagePortfolioMarketValue);
-        this.averagePortfolioBeMe = average(portfolioBeMe);
+        this.averageReturn =  super.average(returns);
+        this.averagePortfolioReturnString = averageString(averageReturn);
+        this.averageMarketValue = super.average(marketValues);
+        this.averagePortfolioMarketValueString = averageString(averageMarketValue);
+        this.averagePortfolioBeMe = super.average(beMeRatios);
         this.averagePortfolioBeMeString = averageString(averagePortfolioBeMe);
-    }
-
-    /**
-     * Calculates the mean of the given array return
-     * @param array An array holding all the information
-     * @return average value
-     * @example
-     * <pre name="test">
-     * #TOLERANCE=0.001
-     * exampleCompanies();
-     * portfolio.average(Nokia.returns) ~~~ 0.012;
-     * double[] array = new double[]{1.5, 0, -1.5, -1.6};
-     * double[] array2 = new double[]{};
-     * double[] array3 = new double[]{1.6, 5.9, 99, 6.45, 1.88};
-     * portfolio.average(array) ~~~ -0.4;
-     * portfolio.average(array2) ~~~ 0.0;
-     * portfolio.average(array3) ~~~ 22.966;
-     * </pre>
-     */
-    public double average(double[] array) {
-        if(array.length != 0) {
-            double average = 0;
-            for(int i = 0; i < array.length; i++) {
-                average += array[i];
-            }
-            average =  average/array.length;
-            return average;
-        }
-        return 0;
     }
     
     /**
@@ -237,7 +196,7 @@ public class Portfolio {
         for(int i = 0; i < 12; i++) {
             for(int j = 0; j < companies.size(); j++) {
                 int month = period*12+i;
-            portfolioMarketValue[i] += companies.get(j).marketValues[month];
+            marketValues[i] += companies.get(j).getDouble(1, month);
             }
         }
     }
@@ -270,9 +229,9 @@ public class Portfolio {
         for(int i = 0; i < 12; i++) {
             for(int j = 0; j < companies.size(); j++) {
                 int month = period*12+i;
-            portfolioBeMe[i] += companies.get(j).beMeRatios[month];
+            beMeRatios[i] += companies.get(j).getDouble(2, month);
             }
-            portfolioBeMe[i] = portfolioBeMe[i]/companies.size();
+            beMeRatios[i] = beMeRatios[i]/companies.size();
         }
     }
     
@@ -287,8 +246,8 @@ public class Portfolio {
      */
     public double getMinValue() {
         double min = Double.MAX_VALUE;
-        for(int i = 0; i < portfolioReturns.length; i++) {
-            if(portfolioReturns[i] < min) min = portfolioReturns[i];
+        for(int i = 0; i < returns.length; i++) {
+            if(returns[i] < min) min = returns[i];
         }
         return min;
     }
@@ -304,8 +263,8 @@ public class Portfolio {
      */
     public double getMaxValue() {
         double max = -Double.MAX_VALUE;
-        for(int i = 0; i < portfolioReturns.length; i++) {
-            if(portfolioReturns[i] > max) max = portfolioReturns[i];
+        for(int i = 0; i < returns.length; i++) {
+            if(returns[i] > max) max = returns[i];
         }
         return max;
     }
@@ -314,9 +273,32 @@ public class Portfolio {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for(int i = 0; i < companies.size(); i++) {
-            s.append(companies.get(i).name);
+            s.append(companies.get(i).getName());
         }
         return s.toString();
+    }
+    
+    /**
+     * Calculates the treynor ratio of the porrtfolio
+     * @param marketReturns An array of the market returns
+     * @param aveMarketReturn Average market return
+     * @return Portfolios treynor ratio
+     */
+    public double treynorRatio(double[] marketReturns, double aveMarketReturn) {
+        return super.treynorRatio(marketReturns, aveMarketReturn, returns, marketValues, averageReturn, false);
+    }
+    
+    /**
+     * @param number Which string is requeted
+     * @return Certain string value of the wanted variable
+     */
+    public String getString(int number) {
+        switch(number) {
+        case 0: return averagePortfolioReturnString; 
+        case 1: return averagePortfolioMarketValueString; 
+        case 2: return averagePortfolioBeMeString; 
+        default: return "";
+        }
     }
     
     /**

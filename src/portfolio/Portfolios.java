@@ -83,12 +83,12 @@ public class Portfolios {
         adjustPortfolios(mvCount, bmCount,  number);     
         
         for(int i = 0; i < companies.size(); i++) {
-            int size = size(companies.get(i).marketValues[year], sizeBreakPoints);
-            int beme = beMe(companies.get(i).beMeRatios[year], beMeBreakPoints);
-            if(companies.get(i).marketValues[year] != 0 && number == 0) {
+            int size = size(companies.get(i).getDouble(1, year), sizeBreakPoints);
+            int beme = beMe(companies.get(i).getDouble(2, year), beMeBreakPoints);
+            if(companies.get(i).getDouble(1, year) != 0 && number == 0) {
                 portfolios[size*bmCount+beme].addCompany(companies.get(i));
             }    
-            else if(companies.get(i).marketValues[year] != 0 && number == 1) {
+            else if(companies.get(i).getDouble(1, year) != 0 && number == 1) {
                 factorPortfolios[size*bmCount+beme].addCompany(companies.get(i));
             }
         }

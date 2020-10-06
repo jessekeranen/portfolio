@@ -14,7 +14,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -63,6 +62,7 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     private Company currentCompany;
     private XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
     private double averageReturn;
+    @SuppressWarnings("unused")
     private Market market;
     
     /**
@@ -73,18 +73,18 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     public static Company askCompany(Stage modalityStage, Company company) {
         return ModalController.showModal(
                 CompanyGUIController.class.getResource("CompanyGUIView.fxml"),
-                company.name,
+                company.getName(),
                 modalityStage, company, null 
             );
     }
     
+    /**
+     * @param market Sets the market
+     */
     public void setMarket(Market market) {
-        market(market);
-    }
-    
-    public void market(Market market) {
         this.market = market;
     }
+
     
     /**
      * Shows the information about observed company
@@ -92,19 +92,19 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
      */
     public void showCompany(Company company) {
         if( company == null) return;
-        editName.setText(company.name);
-        averageReturn = company.average(company.returns);
+        editName.setText(company.getName());
+        averageReturn = company.average(company.getArray(0));
         editReturn.setText(String.valueOf(averageReturn));
-        editBeMe.setText(String.valueOf(company.average(company.beMeRatios)));
-        editMarketValue.setText(String.valueOf(company.average(company.marketValues)));
-        editSharpe.setText(String.valueOf(company.sharpeRatio));
-        editTreynor.setText(String.valueOf(company.treynorRatio));
-        editBeta.setText(String.valueOf(company.beta));
+        editBeMe.setText(String.valueOf(company.average(company.getArray(2))));
+        editMarketValue.setText(String.valueOf(company.average(company.getArray(1))));
+        editSharpe.setText(String.valueOf(company.getDouble(3)));
+        editTreynor.setText(String.valueOf(company.getDouble(4)));
+        editBeta.setText(String.valueOf(company.getDouble(2)));
         
         pane2.getChildren().clear();
-        axis = setAxis("Month", 1, company.returns.length);
+        axis = setAxis("Month", 1, company.getArray(0).length);
         ayis = setAxis("Return", -10, 10);
-        series = loadData(company.returns, chart, series);
+        series = loadData(company.getArray(0), chart, series);
         chart.getData().add(series);
         pane2.getChildren().addAll(chart);
         chart.autosize();
@@ -119,8 +119,8 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
      */
     public ObservableList<Month> getCompanies(Company company){
         ObservableList<Month> data = FXCollections.observableArrayList();
-        for(int i = 0; i < company.returns.length; i++) {
-            data.add(new Month(company.returns[i], company.beMeRatios[i], company.marketValues[i], company.bookValues[i]));
+        for(int i = 0; i < company.getArray(0).length; i++) {
+            data.add(new Month(company.getDouble(3, i), company.getDouble(4, i), company.getDouble(1, i), company.getDouble(2, i)));
         }
         return data;
     }
@@ -148,8 +148,7 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
 
     @Override
     public void handleShown() {
-        // TODO Auto-generated method stub
-        
+        // TODO Auto-generated method stub        
     }
 
     @Override

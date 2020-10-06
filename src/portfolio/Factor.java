@@ -32,14 +32,14 @@ public class Factor {
      */
     public void premiums(int bemeBreakPoints){
         for(int i = 0; i < Company.years; i ++) {
-            for(int j = 0; j < portfolios[0][0].portfolioReturns.length; j++) {
+            for(int j = 0; j < portfolios[0][0].getArray(0).length; j++) {
                 double sumSmall = 0;
                 double sumLarge = 0;
                 for(int k = 0; k < bemeBreakPoints+1; k++) {
-                    sumSmall += portfolios[i][k].portfolioReturns[j];
+                    sumSmall += portfolios[i][k].getDouble(0, j);
                 }
                 for(int k = bemeBreakPoints+1; k < portfolios[0].length; k++) {
-                    sumLarge += portfolios[i][k].portfolioReturns[j];
+                    sumLarge += portfolios[i][k].getDouble(0, j);
                 }
                 premiums[i*12+j] = ((1/(Double.valueOf(bemeBreakPoints)+1))*sumSmall)/((1/(Double.valueOf(bemeBreakPoints)+1))*sumLarge);
             }

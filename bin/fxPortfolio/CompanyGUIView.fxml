@@ -24,6 +24,7 @@
                     <columnConstraints>
                       <ColumnConstraints hgrow="NEVER" minWidth="120.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
                         <ColumnConstraints minWidth="10.0" />
                     </columnConstraints>
                     <rowConstraints>
@@ -76,27 +77,27 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Year n" wrappingWidth="34.66455078125" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-                        <Text fx:id="editName" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                        <Text fx:id="editReturn" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Text fx:id="editDivident" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Text fx:id="editMarketValue" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <Text fx:id="editBeMe" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                        <Text fx:id="editTreynor" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                        <Text fx:id="editSharpe" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Year n" wrappingWidth="34.66455078125" GridPane.columnIndex="3" GridPane.rowIndex="10" />
+                        <Text fx:id="editName" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                        <Text fx:id="editReturn" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Text fx:id="editDivident" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Text fx:id="editMarketValue" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <Text fx:id="editBeMe" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                        <Text fx:id="editTreynor" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                        <Text fx:id="editSharpe" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="6" />
                         <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="11" />
                         <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="12" />
                         <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="13" />
                         <Label text="Beta coefficient:" GridPane.rowIndex="9">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Text fx:id="editBeta" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                        <Text fx:id="editBeta" fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="9" />
                         <Label text="Name:" GridPane.rowIndex="1">
                            <padding>
                               <Insets left="5.0" />
@@ -123,9 +124,9 @@
                            </padding>
                         </Label>
                         <Pane id="pane3" GridPane.rowIndex="10" />
-                        <Pane id="pane3" GridPane.columnIndex="2" GridPane.rowIndex="10">
+                        <Pane id="pane3" GridPane.columnIndex="3" GridPane.rowIndex="10">
                            <children>
-                              <Text fill="WHITE" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year n-1" />
+                              <Text fill="WHITE" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year n-2" />
                            </children>
                         </Pane>
                         <Pane id="pane3" GridPane.columnIndex="1" GridPane.rowIndex="10">
@@ -134,12 +135,21 @@
                            </children>
                         </Pane>
                         <Pane id="pane3" GridPane.columnIndex="1" />
-                        <Pane id="pane3" GridPane.columnIndex="2" />
+                        <Pane id="pane3" GridPane.columnIndex="3" />
                         <Pane id="pane3">
                            <children>
                               <Text fill="WHITE" layoutX="5.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Company information:" wrappingWidth="128.40625" />
                            </children>
                         </Pane>
+                        <Pane id="pane3" GridPane.columnIndex="2" GridPane.rowIndex="10">
+                           <children>
+                              <Text fill="WHITE" layoutX="1.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year n-1" />
+                           </children>
+                        </Pane>
+                        <Pane id="pane3" GridPane.columnIndex="2" />
+                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+                        <Text fill="#989898" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="13" />
                      </children>
                      <HBox.margin>
                         <Insets bottom="5.0" right="5.0" />
