@@ -20,6 +20,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <BorderPane id="pane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPortfolio.MainPageGUIController">
@@ -70,11 +71,14 @@
       </HBox>
    </bottom>
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+      <ScrollPane>
+         <BorderPane.margin>
+            <Insets left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
          <content>
             <VBox>
                <children>
-                  <GridPane prefWidth="315.0">
+                  <GridPane id="grid">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="241.0" minWidth="10.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="337.0" minWidth="0.0" />
@@ -88,29 +92,32 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Name" />
-                        <Label text="Average return" GridPane.rowIndex="1" />
-                        <Label text="Average Be/Me" GridPane.rowIndex="2" />
-                        <Label text="Average market value" GridPane.rowIndex="3" />
-                        <Label text="Sharpe ratio:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Label text="Treynor ratio:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Label text="Beta coefficient:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Text fx:id="portfolioName" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
-                        <Text fx:id="portfolioAveReturn" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Text fx:id="portfolioAveBeMe" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Text fx:id="portfolioAveMarketValue" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Text fx:id="portfolioSharpe" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Text fx:id="portfolioTreynor" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Text fx:id="portfolioBeta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Label text="Name:" textFill="#989898" />
+                        <Label text="Average return:" textFill="#989898" GridPane.rowIndex="1" />
+                        <Label text="Average Be/Me:" textFill="#989898" GridPane.rowIndex="2" />
+                        <Label text="Average Market Value:" textFill="#989898" GridPane.rowIndex="3" />
+                        <Label text="Sharpe ratio:" textFill="#989898" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label text="Treynor ratio:" textFill="#989898" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label text="Beta coefficient:" textFill="#989898" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Text fx:id="portfolioName" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" />
+                        <Text fx:id="portfolioAveReturn" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text fx:id="portfolioAveBeMe" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text fx:id="portfolioAveMarketValue" fill="#ff8132" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Text>
+                        <Text fx:id="portfolioSharpe" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Text fx:id="portfolioTreynor" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Text fx:id="portfolioBeta" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets left="5.0" />
+                        <Insets />
                      </VBox.margin>
                   </GridPane>
-                  <GridPane>
+                  <GridPane id="grid2">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -124,27 +131,32 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Return" GridPane.rowIndex="1" />
-                        <Label text="Market Value" GridPane.rowIndex="2" />
-                        <Label text="Book Value" GridPane.rowIndex="3" />
-                        <Label text="Year n" GridPane.columnIndex="1" />
-                        <Label text="Year n-1" GridPane.columnIndex="2" />
-                        <Label text="Year n-2" GridPane.columnIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Label text="Return:" textFill="#989898" GridPane.rowIndex="1" />
+                        <Label text="Market Value:" textFill="#989898" GridPane.rowIndex="2" />
+                        <Label text="Be/Me Ratio:" textFill="#989898" GridPane.rowIndex="3" />
+                        <Label text="12 months" textFill="WHITE" GridPane.columnIndex="1" />
+                        <Label text="6 monhts" textFill="WHITE" GridPane.columnIndex="2" />
+                        <Label text="1 month" textFill="WHITE" GridPane.columnIndex="3" />
+                        <Text fx:id="return1" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text fx:id="marketValue1" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text fx:id="return2" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Text fx:id="return3" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Text fx:id="marketValue2" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Text fx:id="marketValue3" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Text fx:id="bookValue1" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text fx:id="bookValue2" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Text fx:id="bookValue3" fill="#ff8132" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                      </children>
                      <padding>
                         <Insets left="5.0" />
                      </padding>
                   </GridPane>
-                  <Pane fx:id="pane">
+                  <Label alignment="TOP_RIGHT" text="Returns:" textFill="#989898">
+                     <VBox.margin>
+                        <Insets left="40.0" top="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Pane id="pane4" fx:id="pane">
                      <children>
                         <LineChart fx:id="chart" animated="false">
                           <xAxis>
@@ -153,6 +165,9 @@
                           <yAxis>
                             <NumberAxis fx:id="ayis" side="LEFT" />
                           </yAxis>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                           </padding>
                         </LineChart>
                      </children>
                      <VBox.margin>
@@ -162,9 +177,6 @@
                </children>
             </VBox>
          </content>
-         <BorderPane.margin>
-            <Insets left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin>
       </ScrollPane>
    </center>
    <left>
@@ -195,7 +207,7 @@
                   </Pane>
                </children>
             </VBox>
-            <ListChooser fx:id="chooserPortfolios" onMousePressed="#show" rivit="p&#10;&#10;&#10;&#10;&#10;&#10;&#10;" />
+            <ListChooser fx:id="chooserPortfolios" onMousePressed="#show" rivit="&#10;&#10;&#10;&#10;&#10;&#10;&#10;" />
         </items>
          <BorderPane.margin>
             <Insets left="2.0" top="5.0" />

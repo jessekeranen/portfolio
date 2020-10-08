@@ -1,5 +1,7 @@
 package portfolio;
 
+import java.text.DecimalFormat;
+
 /**
  * @author jessekeranen
  * @version 5.10.2020
@@ -7,6 +9,7 @@ package portfolio;
  */
 public class Asset {
     
+        /** Name of the asset */
         protected String name;
         
         protected double averageReturn;
@@ -22,7 +25,7 @@ public class Asset {
     
         /**
          * Calculates the Sharpe ratio of the company
-         * @param returns array of the assets returns
+         * @param profits array of the assets returns
          * @param rf array of the risk free returns
          * @return Sharpe ratio of the company
          * @example
@@ -32,18 +35,18 @@ public class Asset {
          * Nokia.sharpeRatio ~~~ -0.112799;
          * </pre>
          */
-        public double sharpeRatio(double[] returns, double[] rf) {
+        public double sharpeRatio(double[] profits, double[] rf) {
             double std = 0;
             double excessReturn = 0;
-            for(int i = 1; i < returns.length; i++) {
-                excessReturn += returns[i] - rf[i];
+            for(int i = 1; i < profits.length; i++) {
+                excessReturn += profits[i] - rf[i];
             }
-            excessReturn = excessReturn/(returns.length-1);
+            excessReturn = excessReturn/(profits.length-1);
             
-            for(int j = 1; j < returns.length; j++) {
-                std += Math.pow((returns[j] - rf[j] - excessReturn), 2);
+            for(int j = 1; j < profits.length; j++) {
+                std += Math.pow((profits[j] - rf[j] - excessReturn), 2);
             }
-            std = Math.sqrt(std/(returns.length-1));
+            std = Math.sqrt(std/(profits.length-1));
             
             return excessReturn/std;
         }
@@ -86,7 +89,9 @@ public class Asset {
         
         /**
          * Calculates the mean of the given array return
+         * There -1 in the denominator of the dididing because first cell of the returns array is always zero
          * @param array An array holding all the information
+         * @param returnArray Is the array return array or not
          * @return average value
          * @example
          * <pre name="test">
@@ -101,22 +106,31 @@ public class Asset {
          * Nokia.average(array3) ~~~ 22.966;
          * </pre>
          */
-        public double average(double[] array) {
+        public double average(double[] array, boolean returnArray) {
             if(array.length != 0) {
                 double average = 0;
                 for(int i = 0; i < array.length; i++) {
                     average += array[i];
                 }
-                average =  average/array.length;
+                if(returnArray == true) average = average/(array.length-1);
+                else average = average/array.length;
                 return average;
             }
             return 0;
         }
         
+        /**
+         * @return Returns the name of the asset
+         */
         public String getName() {
             return name;
         }
         
+        /**
+         * Returns value of requested asset variable
+         * @param number Indicates which variable is requested
+         * @return Returns value of requested asset variable
+         */
         public double getDouble(int number) {
             switch(number) {
             case 0: return averageReturn;
@@ -128,6 +142,12 @@ public class Asset {
             }
         }
         
+        /**
+         * Returns a value of certain cell, indicated by parameter k, from an array holding asset information
+         * @param number In which array infromation is located
+         * @param k In which cell wanted information is located
+         * @return Requested value
+         */
         public double getDouble(int number, int k) {
             switch(number) {
             case 0: return returns[k];
@@ -137,6 +157,11 @@ public class Asset {
             }
         }
         
+        /**
+         * Returns an array of asset information
+         * @param number Which array is requested
+         * @return Asset information array
+         */
         public double[] getArray(int number) {
             switch(number) {
             case 0: return returns;
@@ -144,5 +169,26 @@ public class Asset {
             case 2: return beMeRatios;
             default: return null;
             }
+        }
+        
+        /**
+         * Returns cumulative return between last moment and the momen indicated by the parameter period
+         * @param period Starting point 
+         * @return Assets return
+         */
+        public double getReturn(int period) {
+            double profit = 1;
+            for(int i = (returns.length-period); i < returns.length; i++) {
+                profit = profit*(1+returns[i]);
+            }
+            return profit-1;
+        }
+        /**
+         * Changes the average portfolio return from double to string
+         * @param average double value of the mean
+         * @return String value of the average
+         */
+        public String averageString(double average) {
+            return new DecimalFormat("#.#######").format(average);
         }
 }

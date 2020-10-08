@@ -23,7 +23,7 @@ public class Market {
     /** From how many months does the data consist */
     public int months;
     /** Two dimensional array of the portfolio retruns for whole period for each portfolio */
-    public double[][] periodPortfolioRetruns;      
+    public double[][] periodPortfolioReturns;      
     /** An array of factors */
     public Factor[] factors = new Factor[2]; 
     /** An array of factor portfolios for each year */
@@ -37,6 +37,8 @@ public class Market {
     public double averageReturn;
     /** An array of the risk free returns */
     public double rf[];
+    /** An array of portfolios that hold information from whole perdiod */
+    public Portfolio[] wholePeriodPortfolios;
     
     /**
      * Constructor
@@ -48,13 +50,15 @@ public class Market {
         this.portfolioMaxCount = (MarketValueCounts*BeMeCounts);
         this.months = months;
         this.years = new Portfolio[months/12][portfolioMaxCount];
-        this.periodPortfolioRetruns = new double[portfolioMaxCount][months];
+        this.periodPortfolioReturns = new double[portfolioMaxCount][months];
         this.beMeBreakPoints = new double[BeMeCounts-1];
         this.sizeBreakPoints = new double[MarketValueCounts-1];
         this.factorYears = new Portfolio[months/12][6];
         this.periodFactorPortfolioRetruns = new double[2][months];
+        this.wholePeriodPortfolios = new Portfolio[portfolioMaxCount];
         rf();
     }
+    
     
     /**
      * Adds a company to the companies array
@@ -184,15 +188,51 @@ public class Market {
     }
     
     /**
+     * Constructs portfolios holding information from whole period
+     * @param mvCount How many size portfolios there is?
+     * @param bmCount How many value portfolios there is?
+     */
+    public void period(int mvCount, int bmCount) {
+        for(int j =0; j < mvCount; j++) {
+            for(int i = 0; i < bmCount; i++) {
+                wholePeriodPortfolios[j*bmCount + i] = new Portfolio(j+1,i+1, months/12*12);
+                wholePeriodPortfolios[j*bmCount + i].returns = periodPortfolios(i, 0, months/12*12, false);
+                wholePeriodPortfolios[j*bmCount + i].marketValues = periodPortfolios(i, 1, months/12*12, false);
+                wholePeriodPortfolios[j*bmCount + i].beMeRatios = periodPortfolios(i, 2, months/12*12, false);
+                wholePeriodPortfolios[j*bmCount + i].calculateAverages();
+            }
+        }
+    }
+    /**
      * Calculates portfolio returns for each portfoio for whole period. 
+     * @param port which portfolio
+     * @param number What information is added
+     * @param length Length of the array returnes
      * @param factor Are we dealing with factor portfolios or regular portfolios
+     * @return An array that holds information from whole period 
+     */
+    private double[] periodPortfolios(int port, int number, int length, boolean factor) { 
+        double[] array = new double[length];
+        if(factor == false) {
+                int beginning = 0; 
+                for(int i = 0; i < months/12; i++) {
+                    System.arraycopy(years[i][port].getArray(number), 0, array, beginning, years[i][port].getArray(number).length);
+                    beginning += years[i][port].getArray(number).length;
+                }
+        }
+        return array;
+    }
+    
+    /**
+     * This method is used when factor or portfolio returns are printed
+     * @param factor Are we printing factors or portfolios
      */
     public void periodPortfolioReturns(boolean factor) { 
         if(factor == false) {
             for(int j = 0; j < portfolioMaxCount; j++) {
                 int beginning = 0; 
                 for(int i = 0; i < months/12; i++) {
-                    System.arraycopy(years[i][j].getArray(0), 0, periodPortfolioRetruns[j], beginning, years[i][j].getArray(0).length);
+                    System.arraycopy(years[i][j].getArray(0), 0, periodPortfolioReturns[j], beginning, years[i][j].getArray(0).length);
                     beginning += years[i][j].getArray(0).length;
                 }
             }
@@ -224,12 +264,12 @@ public class Market {
      * @return average book value
      */
     public String periodAverageReturn(int number) {
-        periodPortfolioReturns(false);
+        //periodPortfolios(false);
         double average = 0;
-        for(int i = 0; i < periodPortfolioRetruns[number].length; i++) {
-            average += periodPortfolioRetruns[number][i];
+        for(int i = 0; i < periodPortfolioReturns[number].length; i++) {
+            average += periodPortfolioReturns[number][i];
         }
-        average = average/periodPortfolioRetruns[number].length;
+        average = average/periodPortfolioReturns[number].length;
         return String.format("%.5f", average);
     }
     

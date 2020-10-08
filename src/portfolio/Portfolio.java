@@ -61,13 +61,18 @@ import java.util.ArrayList;
  * XSSFSheet sheet2 = workbook.createSheet("MarketValues");
  * XSSFSheet sheet3 = workbook.createSheet("BookValues");
  * XSSFSheet sheet4 = workbook.createSheet("Dividends"); 
+ * 
+ * double[] array = new double[12];
+ * for(int i = 0; i < 12; i++) {
+ *      array[i] = 0.01;
+ * }
  *  
  *      addData(filename, "Nokia", 1, workbook, sheet, sheet2, sheet3, sheet4);
- *      Nokia = new Company(sheet, sheet3, sheet2, sheet4, 0);
+ *      Nokia = new Company(sheet, sheet3, sheet2, sheet4, array, 0);
  *      addData(filename, "Nordea", 2, workbook, sheet, sheet2, sheet3, sheet4);
- *      Nordea = new Company(sheet, sheet3, sheet2, sheet4, 0);
+ *      Nordea = new Company(sheet, sheet3, sheet2, sheet4, array, 0);
  *      addData(filename, "Telia", 1.5, workbook, sheet, sheet2, sheet3, sheet4);
- *      Telia = new Company(sheet, sheet3, sheet2, sheet4, 0);
+ *      Telia = new Company(sheet, sheet3, sheet2, sheet4, array, 0);
  *      
  *      try{
  *          workbook.close(); 
@@ -82,6 +87,8 @@ import java.util.ArrayList;
  *      
  *      portfolio.portfolioMarketValue(0);
  *      portfolio.portfolioReturn(0);
+ *      portfolio.portfolioBeMe(0);
+ *      portfolio.calculateAverages();
  * }
  */
 public class Portfolio extends Asset {
@@ -100,12 +107,24 @@ public class Portfolio extends Asset {
      * @param value indicates the value of the companies in the portfolio
      */
     public Portfolio(int size, int value) {
-        this.name = "portfolio " + size + value;
+        this.name = "Portfolio " + size + value;
         this.returns = new double[12];
         this.marketValues = new double[12];
         this.beMeRatios = new double[12];
     }
-   
+    
+    /**
+     * Constructor for whole period portfolios
+     * @param size Indicates the size of the companies in the portfolio
+     * @param value Indicates the value of the companies in the portfolio
+     * @param length Indicates how much information whole period holds
+     */
+    public Portfolio(int size, int value, int length) {
+        this.name = "Portfolio " + size + value;
+        this.returns = new double[length];
+        this.marketValues = new double[length];
+        this.beMeRatios = new double[length];
+    }
     
     /**
      * @param company company that is added to the portfolio
@@ -131,7 +150,7 @@ public class Portfolio extends Asset {
      * #import java.util.Locale;
      * 
      * exampleCompanies();
-     * double[] array = portfolio.portfolioReturns;
+     * double[] array = portfolio.getArray(0);
      * DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
      * DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
      * for (int i = 0; i < array.length; i++) {
@@ -153,22 +172,12 @@ public class Portfolio extends Asset {
      * Calculates the average portfolio return
      */
     public void calculateAverages() {
-        this.averageReturn =  super.average(returns);
-        this.averagePortfolioReturnString = averageString(averageReturn);
-        this.averageMarketValue = super.average(marketValues);
+        this.averageReturn =  super.average(returns, true);
+        this.averagePortfolioReturnString = super.averageString(averageReturn);
+        this.averageMarketValue = super.average(marketValues, false);
         this.averagePortfolioMarketValueString = averageString(averageMarketValue);
-        this.averagePortfolioBeMe = super.average(beMeRatios);
-        this.averagePortfolioBeMeString = averageString(averagePortfolioBeMe);
-    }
-    
-    /**
-     * Changes the average portfolio return from double to string
-     * @param average double value of the mean
-     * @return String value of the average
-     */
-    public String averageString(double average) {
-        String string = String.format("%.5f", average);
-        return String.valueOf(string);
+        this.averagePortfolioBeMe = super.average(beMeRatios, false);
+        this.averagePortfolioBeMeString =super. averageString(averagePortfolioBeMe);
     }
     
     /**
@@ -182,7 +191,7 @@ public class Portfolio extends Asset {
      * #import java.util.Locale;
      * 
      * exampleCompanies();
-     * double[] array = portfolio.portfolioMarketValue;
+     * double[] array = portfolio.getArray(1);
      * DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
      * DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
      * for (int i = 0; i < array.length; i++) {
@@ -212,9 +221,8 @@ public class Portfolio extends Asset {
      * #import java.text.DecimalFormatSymbols;
      * #import java.util.Locale;
      * 
-     * exampleCompanies();
-     * portfolio.portfolioBeMe(0); 
-     * double[] array = portfolio.portfolioBeMe;
+     * exampleCompanies(); 
+     * double[] array = portfolio.getArray(2);
      * 
      * DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
      * DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
@@ -291,6 +299,13 @@ public class Portfolio extends Asset {
     /**
      * @param number Which string is requeted
      * @return Certain string value of the wanted variable
+     * @example
+     * <pre name="test">
+     * exampleCompanies();
+     * portfolio.getString(0) === "0,17198";
+     * portfolio.getString(1) === "19337,5";
+     * portfolio.getString(2) === "0,9158";
+     * </pre>
      */
     public String getString(int number) {
         switch(number) {

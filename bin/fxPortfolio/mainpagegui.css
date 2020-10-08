@@ -37,7 +37,6 @@
     -fx-background: -fx-accent;
     -fx-text-fill: -fx-selection-bar-text;
 }
-
 .list-view {
 	-fx-border-color: #302F2F;
    	-fx-border-width: 2px;

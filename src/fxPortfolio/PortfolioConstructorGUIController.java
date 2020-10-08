@@ -42,7 +42,7 @@ public class PortfolioConstructorGUIController {
         final FXMLLoader ldr = new FXMLLoader(getClass().getResource("MainPageGUIView.fxml"));
         Pane root = (Pane)ldr.load();
         final MainPageGUIController marketCtrl = (MainPageGUIController)ldr.getController();
-        Scene scene = new Scene(root,1035,900);
+        Scene scene = new Scene(root,1040,900);
         scene.getStylesheets().add(getClass().getResource("mainpagegui.css").toExternalForm());
         
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();

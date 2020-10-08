@@ -2,7 +2,7 @@ package portfolio;
 
 /**
  * Consist from companys information of one chosen month. Month class is used to put data to TableView in
- * CompanyGUICOntroller
+ * CompanyGUIController
  * @author jessekeranen
  * @version 23.9.2020
  *

@@ -67,7 +67,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
  *       System.err.println(e.getMessage());
  *  }
  *  
- * Nokia = new Company(sheet, sheet3, sheet2, sheet4, 0);
+ * double[] array = new double[12];
+ * for(int i = 0; i < 12; i++) {
+ *      array[i] = 0.01;
+ * }
+ *  
+ * Nokia = new Company(sheet, sheet3, sheet2, sheet4, array, 0);
  * }
  * </pre>
  */
@@ -129,7 +134,7 @@ public class Company extends Asset {
                 
             } 
             returns = returns();
-            averageReturn = average(returns);
+            averageReturn = average(returns, true);
             dividends = dividends(sheet4, number);
             marketValues = marketValues(sheet3, number);
             bookValues = bookValues(sheet2, number);  
@@ -153,9 +158,9 @@ public class Company extends Asset {
      * #import java.util.Locale;
      * 
      * exampleCompany();
-     * Nokia.name === "Nokia";
-     * Nokia.returns.length === 12;
-     * double[] array = Nokia.returns;
+     * Nokia.getName() === "Nokia";
+     * Nokia.getArray(0).length === 12;
+     * double[] array = Nokia.getArray(0);
      * DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
      * DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
      * for (int i = 0; i < array.length; i++) {
@@ -183,9 +188,9 @@ public class Company extends Asset {
      * #import java.util.Locale;
      * 
      * exampleCompany();
-     * Nokia.name === "Nokia";
-     * Nokia.returns.length === 12;
-     * double[] array = Nokia.beMeRatios;
+     * Nokia.getName() === "Nokia";
+     * Nokia.getArray(0).length === 12;
+     * double[] array = Nokia.getArray(2);
      * DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
      * DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
      * for (int i = 0; i < array.length; i++) {
@@ -291,7 +296,7 @@ public class Company extends Asset {
     }
     
     /**
-     * Returns value of from one of the companys arrays
+     * Returns value of from one of the companys arrays. These are arrays that asset class doesnt have
      * @param number In which array is requested information
      * @param k Index of wanted information
      * @return Company variable

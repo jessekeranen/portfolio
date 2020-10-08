@@ -93,10 +93,10 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     public void showCompany(Company company) {
         if( company == null) return;
         editName.setText(company.getName());
-        averageReturn = company.average(company.getArray(0));
+        averageReturn = company.getDouble(0);
         editReturn.setText(String.valueOf(averageReturn));
-        editBeMe.setText(String.valueOf(company.average(company.getArray(2))));
-        editMarketValue.setText(String.valueOf(company.average(company.getArray(1))));
+        editBeMe.setText(String.valueOf(company.average(company.getArray(2), false)));
+        editMarketValue.setText(String.valueOf(company.getDouble(1)));
         editSharpe.setText(String.valueOf(company.getDouble(3)));
         editTreynor.setText(String.valueOf(company.getDouble(4)));
         editBeta.setText(String.valueOf(company.getDouble(2)));
