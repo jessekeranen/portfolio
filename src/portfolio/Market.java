@@ -195,11 +195,13 @@ public class Market {
     public void period(int mvCount, int bmCount) {
         for(int j =0; j < mvCount; j++) {
             for(int i = 0; i < bmCount; i++) {
-                wholePeriodPortfolios[j*bmCount + i] = new Portfolio(j+1,i+1, months/12*12);
-                wholePeriodPortfolios[j*bmCount + i].returns = periodPortfolios(i, 0, months/12*12, false);
-                wholePeriodPortfolios[j*bmCount + i].marketValues = periodPortfolios(i, 1, months/12*12, false);
-                wholePeriodPortfolios[j*bmCount + i].beMeRatios = periodPortfolios(i, 2, months/12*12, false);
-                wholePeriodPortfolios[j*bmCount + i].calculateAverages();
+                int index = j*bmCount + i;
+                wholePeriodPortfolios[index] = new Portfolio(j+1,i+1, months/12*12);
+                wholePeriodPortfolios[index].returns = periodPortfolios(index, 0, months/12*12, false);
+                wholePeriodPortfolios[index].marketValues = periodPortfolios(index, 1, months/12*12, false);
+                wholePeriodPortfolios[index].beMeRatios = periodPortfolios(index, 2, months/12*12, false);
+                wholePeriodPortfolios[index].calculateAverages();
+                wholePeriodPortfolios[index].cumulativeReturn();
             }
         }
     }
@@ -239,7 +241,7 @@ public class Market {
         }
         else {
             for(int j = 0; j < factors.length; j++) {
-                    System.arraycopy(factors[j].premiums, 0, periodFactorPortfolioRetruns[j], 0, factors[j].premiums.length);
+                    System.arraycopy(factors[j].getPremiums(), 0, periodFactorPortfolioRetruns[j], 0, factors[j].getPremiums().length);
             }
         }
     }
@@ -279,7 +281,7 @@ public class Market {
      * to the factors array
      */
     public void constructFactors() {
-        for(int i = 0; i < Company.years; i++) {
+        for(int i = 0; i < years.length; i++) {
             constructPortfolios(i,3,2,1);
         }
         for(int i = 0; i < factorYears.length; i++) {
@@ -290,7 +292,7 @@ public class Market {
         }
         factors[0] = new Factor("SMB", 2, factorYears);
         
-        for(int i = 0; i < Company.years; i++) {
+        for(int i = 0; i < years.length; i++) {
             constructPortfolios(i,3,2,1);
         }
         for(int i = 0; i < factorYears.length; i++) {

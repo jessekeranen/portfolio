@@ -23,7 +23,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import portfolio.Company;
 import portfolio.Market;
@@ -113,7 +112,25 @@ public class MainPageGUIController {
         market.constructFactors();
     }
     
-    
+    @FXML
+    private void show() {           
+        int number = comboBox.getSelectedIndex();      
+        currentPortfolio = chooserPortfolios.getSelectedObject();
+        if(currentPortfolio == null) chooserPortfolios.setSelectedIndex(0);
+        
+        if(number != comboBoxCount-1) {
+            currentPortfolio = chooserPortfolios.getSelectedObject();
+            loadData(currentPortfolio.getArray(3));
+            showCompanies(currentPortfolio);  
+        }
+        
+        else {
+            chooserCompanies.clear();
+            currentPortfolio = market.wholePeriodPortfolios[0];
+            addTextfields(market.wholePeriodPortfolios[chooserPortfolios.getSelectedIndex()]);
+            loadData(market.wholePeriodPortfolios[chooserPortfolios.getSelectedIndex()].getArray(3));
+        }      
+    }
 
     private Market market;
     private Portfolio currentPortfolio;
@@ -133,14 +150,13 @@ public class MainPageGUIController {
         market.marketReturns();
         market.averageReturn();
         
-        
         /** Treynor ratios are calculated at this point because to be able to calculate treynor ratio we need to know 
          * market returns which we don´t know before we have created all the companies */
         for(int j = 0; j < market.companies.size(); j++) {
             market.companies.get(j).treynorRatio(market.marketReturns, market.averageReturn);
         }
         
-        for(int i = 0; i < Company.years; i++) {
+        for(int i = 0; i < Company.rows/12; i++) {
             market.constructPortfolios(i, mvCount, bmCount, 0);
         }
         market.period(mvCount, bmCount);
@@ -157,36 +173,19 @@ public class MainPageGUIController {
         chooserPortfolios.setSelectedIndex(0);
     }
     
-    @FXML
-    private void show() {           
-        int number = comboBox.getSelectedIndex();      
-        currentPortfolio = chooserPortfolios.getSelectedObject();
-        if(currentPortfolio == null) chooserPortfolios.setSelectedIndex(0);
-        
-        if(number != comboBoxCount-1) {
-            currentPortfolio = chooserPortfolios.getSelectedObject();
-            loadData(currentPortfolio.getArray(0));
-            showCompanies(currentPortfolio);  
-        }
-        
-        else {
-            chooserCompanies.clear();
-            addTextfields(market.wholePeriodPortfolios[chooserPortfolios.getSelectedIndex()]);
-            loadData(market.wholePeriodPortfolios[chooserPortfolios.getSelectedIndex()].getArray(0));
-        }      
-    }
+    
     
     private void addTextfields(Portfolio portfolio) {
         portfolioName.setText(portfolio.getName()); 
         portfolioAveBeMe.setText(portfolio.getString(2));
         portfolioAveMarketValue.setText(portfolio.getString(1));
-        changeColor(portfolioAveReturn, portfolio, portfolio.getDouble(0));
+        CompanyGUIController.changeColor(portfolioAveReturn, portfolio, portfolio.getDouble(0));
         portfolioSharpe.setText(portfolio.averageString(portfolio.sharpeRatio(portfolio.getArray(0), market.rf)));
         portfolioTreynor.setText(portfolio.averageString(portfolio.treynorRatio(market.marketReturns, market.averageReturn)));
         portfolioBeta.setText(portfolio.averageString(portfolio.beta));
-        changeColor(return1,portfolio, portfolio.getReturn(12));
-        changeColor(return2, portfolio, portfolio.getReturn(6));
-        changeColor(return3, portfolio, portfolio.getReturn(1));
+        CompanyGUIController.changeColor(return1,portfolio, portfolio.getReturn(12));
+        CompanyGUIController.changeColor(return2, portfolio, portfolio.getReturn(6));
+        CompanyGUIController.changeColor(return3, portfolio, portfolio.getReturn(1));
         marketValue1.setText(portfolio.averageString(portfolio.getDouble(1, portfolio.getArray(1).length-12)));
         marketValue2.setText(portfolio.averageString(portfolio.getDouble(1, portfolio.getArray(1).length-7)));
         marketValue3.setText(portfolio.averageString(portfolio.getDouble(1, portfolio.getArray(1).length-1)));
@@ -195,26 +194,27 @@ public class MainPageGUIController {
         bookValue3.setText(portfolio.averageString(portfolio.getDouble(2, portfolio.getArray(2).length-1)));
     }
     
-    private void changeColor(Text text, Portfolio portfolio, double value) {
-        text.setText(portfolio.averageString(value));
-        if(value >= 0) text.setFill(Color.GREEN);
-        else text.setFill(Color.web("A6341B"));
-    }
-    
     private void showPortfolio(Market mrkt) {
         chooserPortfolios.clear();
         chooserPortfolios.setSelectedIndex(0);
         int number = comboBox.getSelectedIndex();
         if(mrkt == null) return; 
         
-        if (number <=  0 || number >= mrkt.years.length) {
+        if (number <=  0) {
             number = 0;
         }
-
+        // Following is done because yearly portfolios and whole period portfolios are stored in different locations
+        if(number < mrkt.years.length) {
             for(int i = 0; i < mrkt.portfolioMaxCount; i++) {
                 chooserPortfolios.add(mrkt.years[number][i].getName(), mrkt.years[number][i]);
+            }   
+        }
+        else {
+            for(int i = 0; i < mrkt.portfolioMaxCount; i++) {
+                chooserPortfolios.add(mrkt.wholePeriodPortfolios[i].getName(), mrkt.wholePeriodPortfolios[i]);
             }
-            show();     
+        }
+        show();
     }
     
     
@@ -234,7 +234,7 @@ public class MainPageGUIController {
         ayis = CompanyGUIController.setAxis("month",1, market.months);
         axis = CompanyGUIController.setAxis("return",-10, 10);
          
-        series = CompanyGUIController.loadData(array, chart, series);
+        series = CompanyGUIController.loadData(array, chart, series, currentPortfolio.getName());
         chart.getData().add(series);
         pane.getChildren().addAll(chart);
     }   
@@ -250,7 +250,7 @@ public class MainPageGUIController {
         else {
             String[] names = new String[market.factors.length];
             for(int i = 0; i < names.length; i++) {
-                names[i] = market.factors[i].name;
+                names[i] = market.factors[i].getName();
             }
             putData(sheet, array, names);
         }

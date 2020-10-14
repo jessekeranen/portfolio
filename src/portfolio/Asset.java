@@ -19,6 +19,7 @@ public class Asset {
         protected double sharpeRatio;
         
         protected double[] returns;
+        protected double[] cumulativeReturns;
         protected double[] marketValues;
         protected double[] beMeRatios;
         
@@ -85,6 +86,13 @@ public class Asset {
             this.beta = covariance/variance;
             double lastYearProfit = ((prices[prices.length-1]-prices[prices.length-12])/prices[prices.length-12]);
             return (lastYearProfit/beta);
+        }
+        
+        public void cumulativeReturn() {
+            cumulativeReturns[0] = 100;
+            for(int i = 1; i < returns.length; i++) {
+                cumulativeReturns[i] = cumulativeReturns[i-1]*(1+returns[i]);
+            }
         }
         
         /**
@@ -167,6 +175,7 @@ public class Asset {
             case 0: return returns;
             case 1: return marketValues;
             case 2: return beMeRatios;
+            case 3: return cumulativeReturns;
             default: return null;
             }
         }

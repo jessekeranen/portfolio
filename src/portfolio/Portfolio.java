@@ -111,6 +111,7 @@ public class Portfolio extends Asset {
         this.returns = new double[12];
         this.marketValues = new double[12];
         this.beMeRatios = new double[12];
+        this.cumulativeReturns = new double[12];
     }
     
     /**
@@ -124,6 +125,7 @@ public class Portfolio extends Asset {
         this.returns = new double[length];
         this.marketValues = new double[length];
         this.beMeRatios = new double[length];
+        this.cumulativeReturns = new double[length];
     }
     
     /**

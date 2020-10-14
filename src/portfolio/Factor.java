@@ -7,10 +7,10 @@ package portfolio;
  */
 public class Factor {
     
-    /** Name of the factor */
-    public String name;
+    
+    private String name;
     /** An array of premiums. For example in the case of SMB facctor this is returns of the small market value portfolios substracted with returns of the large market value portfolios */
-    public double[] premiums;
+    private double[] premiums;
     private Portfolio[][] portfolios; 
     
     /**
@@ -31,7 +31,7 @@ public class Factor {
      * @param bemeBreakPoints Number of Be/Me breakpoints
      */
     public void premiums(int bemeBreakPoints){
-        for(int i = 0; i < Company.years; i ++) {
+        for(int i = 0; i < Company.rows/12; i ++) {
             for(int j = 0; j < portfolios[0][0].getArray(0).length; j++) {
                 double sumSmall = 0;
                 double sumLarge = 0;
@@ -44,5 +44,21 @@ public class Factor {
                 premiums[i*12+j] = ((1/(Double.valueOf(bemeBreakPoints)+1))*sumSmall)/((1/(Double.valueOf(bemeBreakPoints)+1))*sumLarge);
             }
         }
+    }
+    
+    /**
+     * Retruns premium array of the factor
+     * @return Premiums array
+     */
+    public double[] getPremiums() {
+        return premiums;
+    }
+    
+    /**
+     * Returns name of the factor
+     * @return Name of the portfolio
+     */
+    public String getName() {
+        return name;
     }
 }

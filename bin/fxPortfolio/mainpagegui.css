@@ -21,11 +21,44 @@
 .chart-plot-background {
     -fx-background-color: #302F2F;
 }
+.chart-vertical-grid-lines {
+    -fx-stroke: #3B3B3B;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #3B3B3B;
+}
+.chart-legend {
+   -fx-background-color:  transparent;
+}
+.chart-legend-item-symbol{
+	-fx-background-color: transparent;
+    -fx-background-size: 20px;
+    -fx-background-image: url("chartSymbol.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center; 
+    -fx-padding: 10;
+}
+.chart-legend-item{
+    -fx-font-size: 1.0em;
+    -fx-text-fill: #989898;
+}
+.axis-label {
+   -fx-text-fill: #989898; 
+}
 .list-cell {
 	-fx-background-color: #302F2F;
 	-fx-text-fill: #989898;
 	-fx-border-width:0 0 1px 0;
     -fx-border-color:#3B3B3B;
+}
+.list-cell:hover{
+	-fx-background-color: #4076ff;
+	-fx-opacity: 0.5;
+}
+.list-cell:selected:hover{
+	-fx-border-width:1px;
+	-fx-background-color: #518DF2;
+    -fx-border-color: #518DF2;
 }
 .list-cell:selected{
     -fx-border-width:1px;
@@ -49,8 +82,15 @@
 	-fx-border-bottom: solid #272727;
 }
 .menu-bar .label{
-	-fx-background-color: #3B3B3B;
 	-fx-text-fill: white;
 }
-
+.menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
+    -fx-opacity: 0.7;
+}
+.context-menu {
+    -fx-background-color: #3B3B3B;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
+    -fx-opacity: 0.9;
+}
 

@@ -79,7 +79,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 public class Company extends Asset {
     
     /** Number of years in data */
-    public static int years;
+    //private static int years;
     //private String name;
     private double[] prices;
     private double[] bookValues;
@@ -104,7 +104,7 @@ public class Company extends Asset {
         XSSFCell cell;        
        
         rows = sheet.getPhysicalNumberOfRows();
-        years = rows/12;
+        //years = rows/12;
         
         prices = new double[rows-1];
 
@@ -134,9 +134,12 @@ public class Company extends Asset {
                 
             } 
             returns = returns();
+            cumulativeReturns = new double[returns.length];
+            cumulativeReturn();
             averageReturn = average(returns, true);
             dividends = dividends(sheet4, number);
             marketValues = marketValues(sheet3, number);
+            averageMarketValue = average(marketValues, false);
             bookValues = bookValues(sheet2, number);  
             beMeRatios = beMeRatio();
             sharpeRatio = super.sharpeRatio(returns, rf);

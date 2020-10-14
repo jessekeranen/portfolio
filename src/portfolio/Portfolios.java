@@ -98,6 +98,7 @@ public class Portfolios {
                 portfolios[i].portfolioReturn(period);
                 portfolios[i].portfolioBeMe(period); 
                 portfolios[i].calculateAverages();
+                portfolios[i].cumulativeReturn();
             }
             return portfolios;
         }

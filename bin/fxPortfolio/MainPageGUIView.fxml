@@ -133,7 +133,7 @@
                      <children>
                         <Label text="Return:" textFill="#989898" GridPane.rowIndex="1" />
                         <Label text="Market Value:" textFill="#989898" GridPane.rowIndex="2" />
-                        <Label text="Book Value:" textFill="#989898" GridPane.rowIndex="3" />
+                        <Label text="Be/Me Ratio:" textFill="#989898" GridPane.rowIndex="3" />
                         <Label text="12 months" textFill="WHITE" GridPane.columnIndex="1" />
                         <Label text="6 monhts" textFill="WHITE" GridPane.columnIndex="2" />
                         <Label text="1 month" textFill="WHITE" GridPane.columnIndex="3" />
@@ -151,22 +151,17 @@
                         <Insets left="5.0" />
                      </padding>
                   </GridPane>
-                  <Label alignment="TOP_RIGHT" text="Returns:" textFill="#989898">
-                     <VBox.margin>
-                        <Insets left="40.0" top="15.0" />
-                     </VBox.margin>
-                  </Label>
                   <Pane id="pane4" fx:id="pane">
                      <children>
-                        <LineChart fx:id="chart" animated="false">
+                        <LineChart fx:id="chart" animated="false" createSymbols="false">
                           <xAxis>
-                            <NumberAxis fx:id="axis" side="BOTTOM" />
+                            <NumberAxis fx:id="axis" label="Month" side="BOTTOM" tickLabelFill="#989898" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis fx:id="ayis" side="LEFT" />
+                            <NumberAxis fx:id="ayis" label="Return" side="LEFT" tickLabelFill="#989898" />
                           </yAxis>
                            <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="15.0" />
                            </padding>
                         </LineChart>
                      </children>

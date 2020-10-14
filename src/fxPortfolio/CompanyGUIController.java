@@ -2,7 +2,6 @@ package fxPortfolio;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.collections.FXCollections;
@@ -16,10 +15,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import portfolio.Asset;
 import portfolio.Company;
-import portfolio.Market;
 import portfolio.Month;
 
 /**
@@ -37,6 +37,15 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     @FXML private Text editSharpe;
     @FXML private Text editTreynor;
     @FXML private Text editBeta;
+    @FXML private Text return1;
+    @FXML private Text return2;
+    @FXML private Text return3;
+    @FXML private Text divident1;
+    @FXML private Text divident2;
+    @FXML private Text divident3;
+    @FXML private Text beMe1;
+    @FXML private Text beMe2;
+    @FXML private Text beMe3;
     @FXML private Pane pane2;
     @FXML private NumberAxis axis;
     @FXML private NumberAxis ayis;
@@ -61,9 +70,6 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     
     private Company currentCompany;
     private XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
-    private double averageReturn;
-    @SuppressWarnings("unused")
-    private Market market;
     
     /**
      * @param modalityStage For what are we modal, if null for the application
@@ -79,37 +85,46 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     }
     
     /**
-     * @param market Sets the market
-     */
-    public void setMarket(Market market) {
-        this.market = market;
-    }
-
-    
-    /**
      * Shows the information about observed company
      * @param company Company which is observed
      */
     public void showCompany(Company company) {
         if( company == null) return;
         editName.setText(company.getName());
-        averageReturn = company.getDouble(0);
-        editReturn.setText(String.valueOf(averageReturn));
-        editBeMe.setText(String.valueOf(company.average(company.getArray(2), false)));
-        editMarketValue.setText(String.valueOf(company.getDouble(1)));
-        editSharpe.setText(String.valueOf(company.getDouble(3)));
-        editTreynor.setText(String.valueOf(company.getDouble(4)));
-        editBeta.setText(String.valueOf(company.getDouble(2)));
+        changeColor(editReturn, company, company.getDouble(0));
+        editBeMe.setText(company.averageString(company.average(company.getArray(2), false)));
+        editMarketValue.setText(company.averageString(company.getDouble(1)));
+        editSharpe.setText(company.averageString(company.getDouble(3)));
+        editTreynor.setText(company.averageString(company.getDouble(4)));
+        editBeta.setText(company.averageString(company.getDouble(2)));
+        changeColor(return1, company, company.getDouble(0, company.getArray(0).length-12));
+        changeColor(return2, company, company.getDouble(0, company.getArray(0).length-24));
+        changeColor(return3, company, company.getDouble(0, company.getArray(0).length-36));
+        beMe1.setText(company.averageString((company.getDouble(2, company.getArray(2).length-12))));
+        beMe2.setText(company.averageString((company.getDouble(2, company.getArray(2).length-24))));
+        beMe3.setText(company.averageString((company.getDouble(2, company.getArray(2).length-36))));
         
         pane2.getChildren().clear();
         axis = setAxis("Month", 1, company.getArray(0).length);
-        ayis = setAxis("Return", -10, 10);
-        series = loadData(company.getArray(0), chart, series);
+        ayis = setAxis("Return", -1, 1);
+        series = loadData(company.getArray(3), chart, series, company.getName());
         chart.getData().add(series);
         pane2.getChildren().addAll(chart);
         chart.autosize();
         
         tableView(company);       
+    }
+    
+    /**
+     * Adds content to the Text item and changes the color of the text depending if value is negative or not
+     * @param text Where text is added
+     * @param asset Asset from value is added
+     * @param value Indicates the period from between the average value is calculated
+     */
+    public static void changeColor(Text text, Asset asset, double value) {
+        text.setText(asset.averageString(value));
+        if(value >= 0) text.setFill(Color.GREEN);
+        else text.setFill(Color.web("A6341B"));
     }
     
     /**
@@ -120,14 +135,14 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
     public ObservableList<Month> getCompanies(Company company){
         ObservableList<Month> data = FXCollections.observableArrayList();
         for(int i = 0; i < company.getArray(0).length; i++) {
-            data.add(new Month(company.getDouble(3, i), company.getDouble(4, i), company.getDouble(1, i), company.getDouble(2, i)));
+            data.add(new Month(company.getDouble(0, i), company.getDouble(2, i), company.getDouble(1, i), company.getDoubleCompany(1, i)));
         }
         return data;
     }
     
     @SuppressWarnings("unchecked")
     private void tableView(Company company) {
-        returns = new TableColumn<Month, Double>("Returns2");
+        returns = new TableColumn<Month, Double>("Returns");
         returns.setCellValueFactory(new PropertyValueFactory<>("profit"));
         BeMes = new TableColumn<Month, Double>("Be/Me Ratios");
         BeMes.setCellValueFactory(new PropertyValueFactory<>("beme"));
@@ -175,14 +190,16 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
      * @param array An array of the company returns
      * @param chart Chart where the information is shown
      * @param series Series where the information is put
+     * @param name Name of the asser
      * @return XYseiries containing the data needed
      */
-    public static XYChart.Series<Number, Number> loadData(double[] array, LineChart<Number, Number>  chart, XYChart.Series<Number, Number> series) {
+    public static XYChart.Series<Number, Number> loadData(double[] array, LineChart<Number, Number>  chart, XYChart.Series<Number, Number> series, String name) {
          chart.getData().clear();
          series.getData().clear();
           
          for(int i = 0; i < array.length; i++) {
              series.getData().add(new XYChart.Data<>(i, array[i]));
+             series.setName(name + " Returns:");
          }
          return series;
      }
