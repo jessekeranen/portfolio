@@ -44,7 +44,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Return:" GridPane.rowIndex="11">
+                        <Label text="Cumulative Return:" GridPane.rowIndex="11">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
@@ -57,7 +57,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label text="Divident yield:" GridPane.rowIndex="12">
+                        <Label text="Divident Yield:" GridPane.rowIndex="12">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
@@ -157,12 +157,12 @@
                   </GridPane>
                   <Pane fx:id="pane2">
                      <children>
-                        <LineChart fx:id="chart" animated="false" createSymbols="false" title="Returns:">
+                        <LineChart fx:id="chart" animated="false" createSymbols="false" title="Return Chart:">
                           <xAxis>
-                            <NumberAxis fx:id="axis" side="BOTTOM" />
+                            <NumberAxis fx:id="axis" label="Month" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis fx:id="ayis" side="LEFT" />
+                            <NumberAxis fx:id="ayis" label="Return" side="LEFT" />
                           </yAxis>
                         </LineChart>
                      </children>

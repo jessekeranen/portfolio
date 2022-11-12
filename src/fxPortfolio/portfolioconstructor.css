@@ -3,7 +3,8 @@
 }
 .label{
 	-fx-text-fill: #989898;
-	-fx-background-image: url("excel2.png");
+	/*-fx-background-image: url("../content/excel.svg"); */
+	-fx-background-image: url("../content/excel2.png");
 	-fx-background-size: 20px; 
 	-fx-background-repeat: no-repeat;
 	

@@ -21,6 +21,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -171,6 +172,8 @@ public class MainPageGUIController {
         showPortfolio(market);   
         chooserCompanies.setOnMouseClicked( e -> { if ( e.getClickCount() > 1 ) showCompany(); } );
         chooserPortfolios.setSelectedIndex(0);
+        chooserCompanies.setId("companies");
+        chooserPortfolios.setId("portfolios");
     }
     
     

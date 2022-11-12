@@ -88,6 +88,9 @@ public class Asset {
             return (lastYearProfit/beta);
         }
         
+        /**
+         * Calculates cumulative returns of the asset
+         */
         public void cumulativeReturn() {
             cumulativeReturns[0] = 100;
             for(int i = 1; i < returns.length; i++) {

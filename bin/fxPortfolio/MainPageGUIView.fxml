@@ -184,7 +184,7 @@
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </TextField>
-                  <ComboBoxChooser fx:id="comboBox" onAction="#whichYear" prefWidth="249.0" rivit="Year 1&#10;Year 2">
+                  <ComboBoxChooser id="combo" fx:id="comboBox" onAction="#whichYear" prefWidth="249.0" rivit="Year 1&#10;Year 2">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" />
                      </VBox.margin>

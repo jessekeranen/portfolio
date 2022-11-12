@@ -24,7 +24,7 @@ public class PortfolioConstructorMain extends Application {
             scene.getStylesheets().add(getClass().getResource("portfolioconstructor.css").toExternalForm());
             primaryStage.setTitle("PortfolioConstructor");
             @SuppressWarnings("resource")
-            Image icon = new Image(getClass().getResourceAsStream("icon.png"));
+            Image icon = new Image(getClass().getResourceAsStream("../content/icon.png"));
             primaryStage.getIcons().add(icon);
             primaryStage.setScene(scene);
             primaryStage.show();

@@ -30,14 +30,16 @@
 .chart-legend {
    -fx-background-color:  transparent;
 }
+
 .chart-legend-item-symbol{
 	-fx-background-color: transparent;
     -fx-background-size: 20px;
-    -fx-background-image: url("chartSymbol.png");
+    -fx-background-image: url("../content/chartSymbol.png");
     -fx-background-repeat: no-repeat;
     -fx-background-position: center; 
     -fx-padding: 10;
 }
+
 .chart-legend-item{
     -fx-font-size: 1.0em;
     -fx-text-fill: #989898;
@@ -45,12 +47,38 @@
 .axis-label {
    -fx-text-fill: #989898; 
 }
+/*
+#companies .list-cell{
+	-fx-background-image: url("../content/trade.png");
+    -fx-background-position: 2px 4px; 
+    -fx-background-size: 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-padding: 5 5 5 27;
+}
+*/
+#companies .list-cell:empty {
+	-fx-background-image: none;
+}
+/* 
+#portfolios .list-cell{
+	-fx-background-image: url("../content/portfolio.png");
+    -fx-background-position: 2px 4px; 
+    -fx-background-size: 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-padding: 5 5 5 27;
+}
+*/
+#portfolios .list-cell:empty {
+	-fx-background-image: none;
+}
 .list-cell {
 	-fx-background-color: #302F2F;
 	-fx-text-fill: #989898;
 	-fx-border-width:0 0 1px 0;
     -fx-border-color:#3B3B3B;
+   
 }
+
 .list-cell:hover{
 	-fx-background-color: #4076ff;
 	-fx-opacity: 0.5;

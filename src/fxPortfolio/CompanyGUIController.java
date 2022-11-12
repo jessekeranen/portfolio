@@ -199,7 +199,7 @@ public class CompanyGUIController implements ModalControllerInterface<Company>, 
           
          for(int i = 0; i < array.length; i++) {
              series.getData().add(new XYChart.Data<>(i, array[i]));
-             series.setName(name + " Returns:");
+             series.setName(name + " Cumulative Returns:");
          }
          return series;
      }
